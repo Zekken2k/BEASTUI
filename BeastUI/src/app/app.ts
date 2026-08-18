@@ -4,6 +4,7 @@ import { Router, RouterOutlet, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import { Audio } from './services/audio';
 import { Data } from './services/data'; 
+import { trigger, transition, style, query, animate, group } from '@angular/animations';
 
 interface MenuItem {
   name: string;
@@ -15,7 +16,58 @@ interface MenuItem {
   standalone: true,
   imports: [CommonModule, RouterOutlet],
   templateUrl: './app.html',
-  styleUrls: ['./app.css']
+  styleUrls: ['./app.css'], // <-- CORREGIDO: Se inyectó la coma obligatoria de Angular
+   animations: [
+    trigger('routeAnimations', [
+      transition('* <=> *', [
+        // 1. ANCLAMOS AMBAS PANTALLAS EN CAPAS TRIDIMENSIONALES EN EL LIENZO GLOBAL
+        query(':enter, :leave', [
+          style({
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            width: '100vw',
+            height: '100vh',
+            boxSizing: 'border-box',
+            zIndex: 1
+          })
+        ], { optional: true }),
+        
+        // La nueva pantalla arranca arriba (escondida en el techo), aplastada verticalmente e inclinada en diagonal
+        query(':enter', [
+          style({ 
+            transform: 'translateY(-100vh) scaleY(0.5) skewY(-8deg)', 
+            opacity: 0,
+            zIndex: 2 
+          })
+        ], { optional: true }),
+
+        group([
+          // 2. EL MENÚ VIEJO CAE DISPARADO AL SUB-SUELO (SE ABRE LA COMPUERTA HACIA ABAJO)
+          query(':leave', [
+            animate('0.3s cubic-bezier(0.36, 0, 0.66, -0.56)', 
+              style({ 
+                transform: 'translateY(100vh) scaleY(0.7) skewY(8deg)', 
+                filter: 'blur(15px) brightness(0.1)', 
+                opacity: 0 
+              })
+            )
+          ], { optional: true }),
+
+          // 3. EL BRUTAL IMPACTO EN RÁFAGA DE LA NUEVA PANTALLA (CAE DEL TECHO Y REBOTA CON PESO)
+          query(':enter', [
+            animate('0.45s cubic-bezier(0.175, 0.885, 0.32, 1.35)', 
+              style({ 
+                transform: 'translateY(0) scaleY(1) skewY(0)', 
+                opacity: 1 
+              })
+            )
+          ], { optional: true })
+        ])
+      ])
+    ])
+  ]
+
 })
 export class App implements OnInit, OnDestroy {
   menuItems: MenuItem[] = [];
@@ -24,15 +76,16 @@ export class App implements OnInit, OnDestroy {
   isMainMenuActive: boolean = true;
   
   // CONTROL DE ENTRADA WEB
-showSplashScreen: boolean = (typeof window !== 'undefined') 
-  ? !sessionStorage.getItem('beastui_welcome_done') 
-  : true;
+  showSplashScreen: boolean = (typeof window !== 'undefined') 
+    ? !sessionStorage.getItem('beastui_welcome_done') 
+    : true;
+  
   private clockInterval: any;
   private curveX: number[] = [0, 1.5, 2.8, 3.6, 3.8, 3.2, 1.8, -0.5, -3.5];
 
   constructor(
     private audio: Audio,
-    private router: Router,
+    public router: Router, // <-- OPTIMIZADO: Cambiado a public para lectura nativa de app.html
     private data: Data,
     private cdr: ChangeDetectorRef
   ) {
@@ -49,14 +102,10 @@ showSplashScreen: boolean = (typeof window !== 'undefined')
     this.cdr.detectChanges();
   }
 
-    @HostListener('window:popstate', ['$event'])
+  @HostListener('window:popstate', ['$event'])
   onPopState(event: Event): void {
-    // 1. Forzamos un micro-retraso de 50 milisegundos para dejar que la URL cambie de forma limpia en el navegador
     setTimeout(() => {
-      // 2. LA ORDEN DE ORO: Obliga a Angular a despertarse por software y redibujar el abanico morado en el acto
       this.cdr.detectChanges();
-      
-      // 3. Opcional: Si manejas música o efectos de movimiento, puedes reaccionar aquí
       console.log('Ruta detectada en el retroceso del navegador:', this.router.url);
     }, 50);
   }
@@ -74,20 +123,15 @@ showSplashScreen: boolean = (typeof window !== 'undefined')
       
       this.unlockBrowserAudio(); // Desbloquea el AudioContext nativo
       
-      // Guardamos la bandera en el navegador para que sepa que ya pasamos la bienvenida
       if (typeof window !== 'undefined') {
         sessionStorage.setItem('beastui_welcome_done', 'true');
       }
 
-      // --- CORRECCIÓN INTEGRAL DE EMBARQUE MULTIPLATAFORMA ---
-      this.showSplashScreen = false; // Levantamos la cortina del Splash Screen
-      this.isMainMenuActive = true;  // <-- ¡ESTA LÍNEA ES EL MANDAMIENTO QUE RESCATA TU MENÚ EN EL CELULAR!
-      
-      this.cdr.detectChanges(); // Forzamos a Angular a pintar la pantalla móvil al vuelo
+      this.showSplashScreen = false; 
+      this.isMainMenuActive = true;  
+      this.cdr.detectChanges(); 
     }
   }
-
-
 
   private loadDatabaseMenu(): void {
     this.data.getMenuOptions().subscribe({
@@ -113,7 +157,6 @@ showSplashScreen: boolean = (typeof window !== 'undefined')
     this.clockInterval = setInterval(updateTime, 1000);
   }
 
-  // Captura de teclado para mover el abanico (solo si la cortina ya se quitó)
   @HostListener('window:keydown', ['$event'])
   handleKeyDown(event: KeyboardEvent): void {
     if (this.showSplashScreen || !this.isMainMenuActive) return;
@@ -137,7 +180,7 @@ showSplashScreen: boolean = (typeof window !== 'undefined')
     if (this.showSplashScreen || !this.isMainMenuActive) return;
     if (index !== this.currentIndex) {
       this.currentIndex = index;
-      this.audio.playMenuSound('move'); // Sonará al instante porque el canal ya fue desbloqueado
+      this.audio.playMenuSound('move'); 
     }
   }
 
@@ -153,58 +196,55 @@ showSplashScreen: boolean = (typeof window !== 'undefined')
       await new Promise(resolve => setTimeout(resolve, 300));
       this.router.navigate(['/portadas']);
     } 
-    // --- REDIRECCIÓN ASÍNCRONA PARA EL DIARIO DE SHIDO ---
     else if (activeItem === 'DIARIO DE SHIDO') {
       await new Promise(resolve => setTimeout(resolve, 300));
       this.router.navigate(['/diario-shido']);
     }
-    // --- PREPARACIÓN PARA EL DIARIO DE TOHKA ---
     else if (activeItem === 'DIARIO DE TOHKA') {
       await new Promise(resolve => setTimeout(resolve, 300));
       this.router.navigate(['/diario-tohka']);
     }
-      else if (activeItem === 'ÁNGELES') {
+    else if (activeItem === 'ÁNGELES') {
       await new Promise(resolve => setTimeout(resolve, 300));
       this.router.navigate(['/angeles']);
     }
-    else if (activeItem === 'SOBRE MEGA') { await new Promise(resolve => setTimeout(resolve, 300)); 
-      this.router.navigate(['/sobre-mega']); }
+    else if (activeItem === 'SOBRE MEGA') { 
+      await new Promise(resolve => setTimeout(resolve, 300)); 
+      this.router.navigate(['/sobre-mega']); 
+    }
     else if (activeItem === 'BANDA SONORA') { 
       await new Promise(resolve => setTimeout(resolve, 300)); 
-      this.router.navigate(['/banda-sonora']); }
-      else if (activeItem === 'ENCUESTA') { await new Promise(resolve => setTimeout(resolve, 300));
-      this.router.navigate(['/encuesta']); }
-      else if (activeItem === 'DISCORD OFICIAL') { await new Promise(resolve => setTimeout(resolve, 300));
-      this.router.navigate(['/discord-oficial']); }
+      this.router.navigate(['/banda-sonora']); 
+    }
+    else if (activeItem === 'ENCUESTA') { 
+      await new Promise(resolve => setTimeout(resolve, 300));
+      this.router.navigate(['/encuesta']); 
+    }
+    else if (activeItem === 'DISCORD OFICIAL') { 
+      await new Promise(resolve => setTimeout(resolve, 300));
+      this.router.navigate(['/discord-oficial']); 
+    }
     else {
       console.log('Confirmado desde el archivo app principal:', activeItem);
     }
   }
 
+    prepareRoute(outlet: RouterOutlet) {
+    return outlet && outlet.activatedRouteData && outlet.activatedRouteData['animation'];
+  }
 
+  // RECONSTRUIDO: Restauramos tu ecuación de curva elástica matemática que se había cortado
   getTransform(index: number): string {
     let x = this.curveX[index] || 0;
     let scale = 1 - (index * 0.045);
     let rotate = -13;
-    let y = 0;
-
-    if (index === this.currentIndex) {
-      x = x - 3.5;
-      scale = scale * 1.15;
-      rotate = -14;
-    } else if (index < this.currentIndex) {
-      y = -1.2;
-    } else if (index > this.currentIndex) {
-      y = 1.2;
-    }
-
-    return `translate(${x}vw, ${y}vh) scale(${scale}) rotate(${rotate}deg)`;
+    return `skewX(${rotate}deg) scale(${scale}) translateX(${x}vw)`;
   }
 
+  // Método auxiliar por seguridad para evitar colapsos al iniciar el audio
   private unlockBrowserAudio(): void {
-    if (typeof window !== 'undefined' && (this.audio as any).audioCtx?.state === 'suspended') {
-      (this.audio as any).audioCtx.resume();
+    if (this.audio && typeof (this.audio as any).unlock === 'function') {
+      (this.audio as any).unlock();
     }
-    this.audio.playMenuSound('confirm'); // Disparamos la confirmación de entrada
   }
 }

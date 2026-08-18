@@ -390,6 +390,7 @@ html, body {
         width: max-content !important;
     }
 
+
     .wallet-container {
         padding: 0.5vh 6vw 0.5vh 3vw !important;
         border-width: 0.25vh !important;
@@ -407,52 +408,73 @@ html, body {
     /* 3. Reducimos el texto gigante de fondo para que no invada la zona de lectura */
     .left-giant-text {
         font-size: 18vw !important;
-        left: 14vw !important;
+        left: 1vw !important;
     }
 
     /* 4. REUBICACIÓN DEL ABANICO: Se centra horizontalmente en el celular */
-    .menu-canvas {
+ .menu-canvas {
         position: relative !important;
+        display: block !important;       /* Lo forzamos a existir como bloque visible */
+        width: 100vw !important;
+        height: auto !important;
+        margin-top: 18vh !important;     /* Margen de aire para salvar el reloj */
+        padding: 0 8vw !important;
         left: 0 !important;
         top: 0 !important;
-        width: 100vw !important;
-        margin-top: 18vh !important; /* Deja espacio limpio para el reloj superior */
-        padding: 0 8vw !important;
-        display: flex !important;
-        justify-content: center !important;
+        transform: none !important;      /* Cancelamos rotaciones residuales */
         z-index: 999 !important;
+        box-sizing: border-box !important;
     }
 
     .menu-list {
+        display: flex !important;
+        flex-direction: column !important; /* Forzamos lista vertical para el dedo */
         width: 100% !important;
-        align-items: center !important; /* Alineación central fluida para el dedo */
-        gap: 1.2vh !important;
+        gap: 1.4vh !important;            /* Espaciado cómodo táctil */
+        padding: 0 !important;
+        margin: 0 !important;
+        align-items: center !important;
     }
 
-    /* Encogemos las opciones para que entren completas sin importar el ancho del móvil */
+    /* --- LA LÍNEA MÁGICA QUE RESCATA LAS OPCIONES DEL ABANICO --- */
     .menu-item {
-        font-size: 3.8vh !important;
-        text-shadow: 0px 1px 0px #04528c, 0px 2px 0px #01284a !important;
-        text-align: center !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
         width: 100% !important;
+        height: 6vh !important;           /* Altura ergonómica para el pulgar */
+        background: rgba(14, 2, 28, 0.9) !important; /* Morado denso de alta visibilidad */
+        border-left: 1.5vw solid #1bf0ff !important; /* Borde cian neón */
+        border-radius: 6px !important;
+        clip-path: none !important;
+        box-sizing: border-box !important;
+        margin: 0 !important;
+        padding: 0 4vw !important;
+        font-size: 2.2vh !important;
+
+        /* EL TRUCO CLAVE: Obligamos al celular a ignorar el getTransform(i) del TypeScript */
+        transform: none !important; 
+    }
+
+    /* Diseño del banner activo seleccionado al tacto */
+    .menu-item.active {
+        background: #ffffff !important;
+        border-left-color: #ff0055 !important; /* Cambio de color a rosa neón activo */
+        font-size: 2.4vh !important;
+        width: 100% !important;
+        transform: none !important; /* También anulamos el transform en el ítem activo */
+    }
+
+    .menu-item.active .text-skew {
+        color: #000000 !important;
+        font-weight: 900 !important;
     }
 
     .text-skew {
-        transform: skewX(-10deg) !important;
-    }
-
-    /* El banner rosa activo se adapta al ancho seguro del celular */
-    .menu-item.active {
-        font-size: 4.8vh !important;
-        padding: 0.6vh 6vw !important;
-        width: auto !important;
-        min-width: 75vw !important;
+        transform: none !important; /* Enderezamos el texto en teléfonos */
         display: block !important;
-    }
-
-    .menu-item.active::before {
-        clip-path: none !important; /* Evita cortes extraños en pantallas de celular angostas */
-        border-radius: 6px !important;
+        width: 100% !important;
+        text-align: left !important;
     }
 
     /* 5. PANEL DE COMANDOS INFERIOR: Fijo abajo con fondo de desvanecimiento negro */

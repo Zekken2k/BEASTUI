@@ -66,24 +66,27 @@ showSplashScreen: boolean = (typeof window !== 'undefined')
   }
 
   // --- ESCUCHA UNIVERSAL PARA DESBLOQUEAR EL INTEGRAL DE AUDIO ---
-@HostListener('window:keydown', ['$event'])
-@HostListener('window:click', ['$event'])
-initialUserInteraction(event: Event): void {
-  if (this.showSplashScreen) {
-    if (event instanceof KeyboardEvent) event.preventDefault();
-    
-    this.unlockBrowserAudio(); // Desbloquea el AudioContext nativo
-    
-    // --- NUEVA LÍNEA CLAVE ---
-    // Guardamos la bandera en el navegador para que sepa que ya pasamos la bienvenida
-    if (typeof window !== 'undefined') {
-      sessionStorage.setItem('beastui_welcome_done', 'true');
-    }
+  @HostListener('window:keydown', ['$event'])
+  @HostListener('window:click', ['$event'])
+  initialUserInteraction(event: Event): void {
+    if (this.showSplashScreen) {
+      if (event instanceof KeyboardEvent) event.preventDefault();
+      
+      this.unlockBrowserAudio(); // Desbloquea el AudioContext nativo
+      
+      // Guardamos la bandera en el navegador para que sepa que ya pasamos la bienvenida
+      if (typeof window !== 'undefined') {
+        sessionStorage.setItem('beastui_welcome_done', 'true');
+      }
 
-    this.showSplashScreen = false; // Levantamos la cortina
-    this.cdr.detectChanges(); 
+      // --- CORRECCIÓN INTEGRAL DE EMBARQUE MULTIPLATAFORMA ---
+      this.showSplashScreen = false; // Levantamos la cortina del Splash Screen
+      this.isMainMenuActive = true;  // <-- ¡ESTA LÍNEA ES EL MANDAMIENTO QUE RESCATA TU MENÚ EN EL CELULAR!
+      
+      this.cdr.detectChanges(); // Forzamos a Angular a pintar la pantalla móvil al vuelo
+    }
   }
-}
+
 
 
   private loadDatabaseMenu(): void {

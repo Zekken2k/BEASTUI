@@ -1,0 +1,131 @@
+<div class="fanfic-diary-screen">
+    
+    <!-- FONDO POLIGONAL ESTILO CASCADA MORADO/AZUL -->
+    <div class="diary-bg-canvas">
+        <div class="bg-layer-back"></div>
+        <div class="bg-giant-watermark">Shido</div>
+        <div class="bg-layer-middle"></div>
+        <div class="bg-layer-front"></div>
+    </div>
+
+    <!-- ENCABEZADO DE LA SECCIÓN -->
+    <header class="diary-screen-header" [class.media-blur]="isReading">
+        <div class="screen-title-container">
+            <span class="screen-subtitle">Algo extraño...</span>
+            <h1 class="screen-main-title">DIARIO DE SHIDO</h1>
+        </div>
+    </header>
+
+    <!-- ARTE CONFIDENCIAL DE SHIDO INTEGRADO 100% DESDE TU BASE DE DATOS -->
+    @if (bgImageUrl) {
+        <div class="diary-character-backdrop">
+            <img [src]="bgImageUrl" alt="Shido Itsuka Databank Art" class="character-backdrop-img">
+        </div>
+    }
+
+    <!-- LISTA DE SLOTS DE RECUERDOS (ESTILO HORIZONTAL) -->
+    @if (entries.length > 0) {
+        <main class="diary-main-layout" [class.media-blur]="isReading">
+            <div class="diary-scroll-canvas">
+                <ul class="diary-logs-list">
+                    @for (entry of entries; track entry.title; let i = $index) {
+                        <!-- Cada renglón evalúa si está activo para cambiar el diseño elásticamente -->
+                        <li class="diary-log-slot" 
+                            [class.item-active]="i === currentIndex"
+                            (mouseenter)="onMouseEnter(i)"
+                            (click)="toggleReading(true)">
+                            
+                            <!-- Número secuencial inclinado a la izquierda -->
+                            <div class="slot-cell-index">
+                                <span class="slot-num">{{ i + 1 }}</span>
+                            </div>
+
+                            <!-- Contenido interno dinámico del slot -->
+                            <div class="slot-cell-body">
+                                @if (i === currentIndex) {
+                                    <!-- DISEÑO RESALTADO COMPLETO (SLOT ACTIVO BLANCO/NEGRO) -->
+                                    <div class="active-slot-layout">
+                                        <div class="active-header-row">
+                                            <span class="active-arco-num">{{ entry.arcoNum }}</span>
+                                            <span class="active-tag-school">RATATOSKR DB</span>
+                                            <span class="active-arco-title">{{ entry.arcoTitle }}</span>
+                                        </div>
+                                        <div class="active-main-row">
+                                            <h2 class="active-entry-title">{{ entry.title }}</h2>
+                                            
+                                            <!-- Ícono romboidal interactivo de bitácora en fucsia neón -->
+                                            <div class="active-read-indicator-box">
+                                                <span class="read-icon-sparkle">✦</span>
+                                                <span class="read-text-badge">LEER MEMORIA</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                } @else {
+                                    <!-- DISEÑO COMPACTO ESTÁNDAR (SLOTS OSCUROS INACTIVOS) PURGADO -->
+                                    <div class="inactive-slot-layout">
+                                        <div class="inactive-left-group">
+                                            <span class="inactive-arco-num">{{ entry.arcoNum }}</span>
+                                            <span class="inactive-tag-school">CONFIDENCIAL</span>
+                                            <span class="inactive-arco-title">{{ entry.arcoTitle }}</span>
+                                        </div>
+                                        
+                                        <div class="inactive-center-title">
+                                            <h3>{{ entry.title }}</h3>
+                                        </div>
+                                        
+                                        <!-- Destello romboidal pasivo en lugar de los textos residuales -->
+                                        <div class="inactive-right-status">
+                                            <span class="inactive-status-sparkle">✦</span>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+
+                        </li>
+                    }
+                </ul>
+            </div>
+            
+            <div class="grid-interaction-prompt">✦ CLICK O ENTER PARA REBOBINAR EL RECUERDO Y LEER ✦</div>
+        </main>
+    }
+
+    <!-- PANEL DE COMANDOS INFERIOR EN ESPAÑOL -->
+    <div class="diary-commands-bar" [class.media-blur]="isReading">
+        <div class="commands-wrapper">
+            <span class="commands-section-title">Comandos</span>
+            <div class="commands-prompts-list">
+                <span class="prompt-item" (click)="toggleReading(true)"><span class="pc-key-badge">Enter</span> Confirmar</span>
+                <span class="prompt-item" (click)="goBack()" style="cursor: pointer;"><span class="pc-key-badge">Esc</span> Salir</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ======================================================== -->
+    <!-- VISOR DE LECTURA DE DIARIO COMPLETO (LIGHTBOX DE LORE)   -->
+    <!-- ======================================================== -->
+    @if (isReading && entries.length > 0) {
+        <div class="diary-lightbox-overlay" (click)="toggleReading(false)">
+            <button class="close-lightbox-btn" (click)="toggleReading(false)">×</button>
+            
+            <div class="lightbox-content-box" (click)="$event.stopPropagation()">
+                <!-- Encabezado del memorándum de Shido -->
+                <div class="lightbox-header-row">
+                    <span class="lightbox-badge-arco">{{ entries[currentIndex].arcoNum }}</span>
+                    <span class="lightbox-badge-title">{{ entries[currentIndex].arcoTitle }}</span>
+                </div>
+                
+                <h2 class="lightbox-entry-title">{{ entries[currentIndex].title }}</h2>
+                
+                <!-- Letrero inclinado sólido donde se imprime el TEXT de HeidiSQL -->
+                <div class="lightbox-text-panel-skew">
+                    <span class="lightbox-author-tag">BITÁCORA DE SHIDO ITSUKA</span>
+                    <p class="lightbox-paragraph-lore">{{ entries[currentIndex].text }}</p>
+                </div>
+
+                <div class="lightbox-footer-prompt">PULSA ESC O HAZ CLICK AFUERA PARA CERRAR</div>
+            </div>
+        </div>
+    }
+
+</div>

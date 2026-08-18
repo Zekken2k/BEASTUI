@@ -1,0 +1,101 @@
+<!-- CONTENEDOR RAÍZ LIMPIO -->
+<div class="fanfic-gallery-screen">
+    
+    <!-- FONDO POLIGONAL DEL FANFIC -->
+    <div class="gallery-bg-canvas" [class.media-blur]="isMaximized">
+        <div class="bg-layer-back-purple"></div>
+        <div class="bg-right-giant-text">PORTADAS</div>
+        <div class="bg-layer-middle-cyan"></div>
+        <div class="bg-layer-front-grid"></div>
+    </div>
+
+    <!-- ENCABEZADO DE VOLUMEN (CARRUSEL SUPERIOR) -->
+    <header class="gallery-screen-header" [class.media-blur]="isMaximized">
+        <div class="screen-title-container">
+            <span class="screen-subtitle"> FRAXINUS DATABANK</span>
+            <h1 class="screen-main-title" (click)="moveVolume(1)" style="cursor: pointer;">
+                {{ uniqueVolumes[currentVolIndex] || 'CARGANDO...' }} ❯
+            </h1>
+        </div>
+
+        <div class="gallery-tabs-container">
+            <button class="tab-btn" [class.active]="activeTab === 'PORTADA'" (click)="switchTab('PORTADA')">
+                <span class="tab-key">Q</span> PORTADAS
+            </button>
+            <button class="tab-btn" [class.active]="activeTab === 'ILUSTRACION'" (click)="switchTab('ILUSTRACION')">
+                <span class="tab-key">E</span> ILUSTRACIONES
+            </button>
+        </div>
+    </header>
+
+    <!-- CONTENEDOR CENTRAL ADAPTATIVO -->
+    <main class="gallery-main-layout" [class.media-blur]="isMaximized">
+        
+        @if (filteredCovers.length === 0) {
+            <div class="gallery-empty-alert">
+                <div class="alert-box-skew">
+                    <span class="alert-icon">✦</span>
+                    <p class="alert-text">NO HAY ILUSTRACIONES REGISTRADAS PARA ESTE VOLUMEN TODAVÍA</p>
+                </div>
+            </div>
+        } @else {
+            <div class="gallery-carousel-wrapper" [class.horizontal-layout]="activeTab === 'ILUSTRACION'">
+                <button class="web-nav-arrow arrow-left" (click)="moveCarousel(-1)">❮</button>
+
+                <div class="gallery-preview-box" (click)="isMaximized = true">
+                    <div class="gallery-neon-frame" [ngClass]="activeTab === 'PORTADA' ? 'vertical-frame' : 'panoramic-frame'">
+                        <img [src]="filteredCovers[currentIndex].imageUrl" alt="Fanfic Media Art" class="gallery-media-img">
+                        <div class="card-glass-glare"></div>
+                    </div>
+                    <div class="grid-interaction-prompt">✦ CLICK PARA AMPLIAR EN HD ✦</div>
+                </div>
+
+                <button class="web-nav-arrow arrow-right" (click)="moveCarousel(1)">❯</button>
+            </div>
+
+            <section class="gallery-details-panel">
+                <div class="volume-badge-skew">
+                    <span>{{ filteredCovers[currentIndex].type }}</span>
+                </div>
+                
+                <h2 class="volume-title-text">{{ filteredCovers[currentIndex].title }}</h2>
+                
+                <div class="synopsis-box-oblique">
+                    <span class="info-tag">SINOPSIS</span>
+                    <p class="synopsis-paragraph">{{ filteredCovers[currentIndex].synopsis }}</p>
+                </div>
+            </section>
+        }
+
+    </main>
+
+    <!-- PANEL DE COMANDOS INFERIOR OPTIMIZADO -->
+    <div class="gallery-commands-bar" [class.media-blur]="isMaximized">
+        <div class="commands-wrapper">
+            <span class="commands-section-title">Controles Web</span>
+            <div class="commands-prompts-list">
+                <span class="prompt-item" (click)="goBack()" style="cursor: pointer;">
+                    <span class="pc-key-badge">Esc</span> Regresar al Menú
+                </span>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- POP-UP DE PANTALLA COMPLETA PROTEGIDO (LIGHTBOX) -->
+@if (isMaximized && filteredCovers.length > 0) {
+    <div class="gallery-lightbox-overlay" (click)="isMaximized = false">
+        <button class="close-lightbox-btn" (click)="isMaximized = false">×</button>
+        
+        <div class="lightbox-content-box" (click)="$event.stopPropagation()">
+            <img [src]="filteredCovers[currentIndex].imageUrl" alt="Maximized Screen" 
+                 class="lightbox-max-img" [class.wide-mode]="activeTab === 'ILUSTRACION'">
+            
+            <div class="lightbox-footer-caption">
+                <span class="caption-vol">{{ filteredCovers[currentIndex].vol }}</span>
+                <span class="caption-title">{{ filteredCovers[currentIndex].title }}</span>
+            </div>
+        </div>
+    </div>
+}

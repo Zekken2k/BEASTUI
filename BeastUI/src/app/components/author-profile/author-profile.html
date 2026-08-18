@@ -1,0 +1,138 @@
+<div class="author-screen-canvas">
+    
+    <!-- FONDO POLIGONAL ESTILO TERMINAL DE OPERACIONES -->
+    <div class="author-bg-layers">
+        <div class="bg-layer-deep-purple"></div>
+        <div class="bg-giant-text-watermark">CREATOR</div>
+        <div class="bg-layer-cyan-glow"></div>
+        <div class="bg-layer-front-grid"></div>
+    </div>
+
+    <!-- ENCABEZADO SUPERIOR -->
+    <header class="author-screen-header">
+        <div class="header-title-container">
+            <span class="header-subtitle">AUTHOR PROFILE DATABASE</span>
+            <h1 class="header-main-title">SOBRE MEGA</h1>
+        </div>
+    </header>
+
+    <!-- CUERPO PRINCIPAL DINÁMICO -->
+    @if (profile) {
+        <main class="author-main-layout">
+            
+            <!-- PANEL IZQUIERDO: EXPEDIENTE CONFIDENCIAL -->
+            <section class="author-dossier-panel">
+                
+                <!-- Rango del Autor estilo Tag Militar -->
+                <div class="author-rank-badge-skew">
+                    <span>{{ profile.rank }}</span>
+                </div>
+                
+                <!-- Nombre del Creador en tipografía masiva -->
+                <h2 class="author-display-name">{{ profile.name }}</h2>
+                
+                <!-- Ficha técnica con Estado de Actividad -->
+                <div class="author-meta-status-row">
+                    <span class="status-indicator-dot"></span>
+                    <span class="status-label-txt">ESTADO:</span>
+                    <span class="status-value-txt">{{ profile.status }}</span>
+                </div>
+
+                <!-- Caja de texto oblicua con la Biografía de HeidiSQL -->
+                <div class="bio-box-oblique">
+                    <span class="info-tag-security">REPORTE CLASIFICADO</span>
+                    <p class="bio-paragraph">{{ profile.bio }}</p>
+                </div>
+
+            </section>
+
+            <!-- PANEL DERECHO: INTERFAZ DE RADAR Y MEDIDORES RPG -->
+            <section class="author-stats-panel">
+                <div class="stats-panel-frame">
+                    
+                    <div class="stats-panel-header-skew">
+                        <h3>ATRIBUTOS DE DESARROLLO</h3>
+                    </div>
+
+                    <div class="stats-bars-container">
+                        
+                        <!-- Barra 1: Creatividad -->
+                        <div class="stat-progress-row">
+                            <div class="stat-info-labels">
+                                <span class="stat-name">CREATIVIDAD</span>
+                                <span class="stat-number">{{ profile.creativity }}%</span>
+                            </div>
+                            <div class="stat-bar-track">
+                                <div class="stat-bar-fill cian-neon" [style.width.%]="profile.creativity"></div>
+                            </div>
+                        </div>
+
+                        <!-- Barra 2: Escritura -->
+                        <div class="stat-progress-row">
+                            <div class="stat-info-labels">
+                                <span class="stat-name">ESCRITURA</span>
+                                <span class="stat-number">{{ profile.writing }}%</span>
+                            </div>
+                            <div class="stat-bar-track">
+                                <div class="stat-bar-fill fucsia-neon" [style.width.%]="profile.writing"></div>
+                            </div>
+                        </div>
+
+                        <!-- Barra 3: Base de Datos -->
+                        <div class="stat-progress-row">
+                            <div class="stat-info-labels">
+                                <span class="stat-name">MAPEO DE DB</span>
+                                <span class="stat-number">{{ profile.database }}%</span>
+                            </div>
+                            <div class="stat-bar-track">
+                                <div class="stat-bar-fill cian-neon" [style.width.%]="profile.database"></div>
+                            </div>
+                        </div>
+
+                        <!-- Barra 4: Diseño UI -->
+                        <div class="stat-progress-row">
+                            <div class="stat-info-labels">
+                                <span class="stat-name">DISEÑO INTERFAZ</span>
+                                <span class="stat-number">{{ profile.design }}%</span>
+                            </div>
+                            <div class="stat-bar-track">
+                                <div class="stat-bar-fill fucsia-neon" [style.width.%]="profile.design"></div>
+                            </div>
+                        </div>
+
+                        <!-- Barra 5: Lore Distorsionado -->
+                        <div class="stat-progress-row">
+                            <div class="stat-info-labels">
+                                <span class="stat-name">LORE DISTORSIONADO</span>
+                                <span class="stat-number">{{ profile.lore }}%</span>
+                            </div>
+                            <div class="stat-bar-track">
+                                <div class="stat-bar-fill cian-neon" [style.width.%]="profile.lore"></div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- Nota técnica inferior en el panel -->
+                    <div class="stats-footer-note">
+                        <span class="note-bullet">✦</span>
+                        <p>Datos sincronizados de forma segura a través de la terminal central del fanfic B.E.A.S.T.</p>
+                    </div>
+
+                </div>
+            </section>
+
+        </main>
+    }
+
+    <!-- PANEL DE COMANDOS INFERIOR EN ESPAÑOL -->
+    <div class="author-commands-bar">
+        <div class="commands-wrapper">
+            <span class="commands-title">Comandos</span>
+            <div class="commands-prompts-list">
+                <span class="prompt-item" (click)="goBack()" style="cursor: pointer;"><span class="pc-key-badge">Esc</span> Regresar al Menú</span>
+            </div>
+        </div>
+    </div>
+
+</div>

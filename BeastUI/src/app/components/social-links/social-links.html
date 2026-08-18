@@ -1,0 +1,67 @@
+<div class="fanfic-network-screen">
+    
+    <!-- LAS CAPAS DE FONDO GEOMÉTRICAS ALBERGAN AL PERSONAJE -->
+    <div class="network-bg-canvas">
+        <div class="bg-layer-back"></div>
+        <div class="bg-giant-watermark">BEAST</div>
+        
+        <!-- La capa del fondo encierra y recorta la ilustración de forma limpia -->
+        <div class="bg-layer-middle">
+            @if (hasValidImage()) {
+                <img [src]="socialCards[currentIndex].avatarUrl" alt="Arcana Artwork" class="character-backdrop-art">
+            }
+        </div>
+        
+        <div class="bg-layer-front"></div>
+    </div>
+
+    <div class="network-screen-title">Lista</div>
+
+    <!-- EL LAYOUT EN UNA SOLA COLUMNA CON TU LISTA EN ABANICO INVERTIDO -->
+    <div class="network-main-layout">
+        <nav class="network-list-canvas">
+            <ul class="network-links-list">
+                @for (card of socialCards; track card.name; let i = $index) {
+                    <li class="network-link-card"
+                        [class.item-active]="i === currentIndex"
+                        [style.transform]="getTransform(i)"
+                        (mouseenter)="onMouseEnter(i)">
+                        
+                        <div class="card-cell-number">{{ card.num }}</div>
+                        
+                        <div class="card-cell-body">
+                            <div class="card-display-name">{{ card.name }}</div>
+                            <div class="card-display-sub">{{ card.sub }}</div>
+                        </div>
+                        
+                        <div class="card-cell-rank">
+                            <span class="rank-lbl">RANK</span>
+                            <span class="rank-num">{{ card.rank }}</span>
+                        </div>
+                    </li>
+                }
+            </ul>
+        </nav>
+    </div>
+
+    <!-- PANEL DE COMANDOS INFERIOR -->
+    @if (socialCards.length > 0) {
+        <div class="network-commands-bar">
+            <div class="commands-description-text">{{ socialCards[currentIndex].desc }}</div>
+            <div class="command-bar-wrapper">
+                <span class="commands-section-title">Información</span>
+                <div class="commands-prompts-list">
+                    <!-- Comando de confirmación web real -->
+                    <span class="prompt-item">
+                        <span class="pc-key-badge">Enter</span> Confirmar
+                    </span>
+                    <!-- Comando de retroceso corregido nativamente con (click) -->
+                    <span class="prompt-item" (click)="goBack()" style="cursor: pointer;">
+                        <span class="pc-key-badge">Esc</span> Cerrar
+                    </span>
+                </div>
+            </div>
+        </div>
+    }
+
+</div>

@@ -1,0 +1,407 @@
+/* ==========================================================
+   --- 1. CONFIGURACIÓN BASE Y LIENZO GENERAL ---
+   ========================================================== */
+.fanfic-network-screen {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    overflow: hidden;
+    background-color: #050101;
+    font-family: 'Montserrat', sans-serif;
+}
+
+/* --- FONDO GEOMÉTRICO DE CASCADA --- */
+.network-bg-canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    pointer-events: none;
+}
+
+.bg-layer-back {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, #001f3f 0%, #8b00cc 100%);
+    clip-path: polygon(0 0, 100% 0, 65% 100%, 0 100%);
+    z-index: 2;
+}
+
+.bg-giant-watermark {
+    position: absolute;
+    bottom: 12vh !important;
+    font-family: 'Impact', sans-serif;
+    font-size: 23vw;
+    color: rgba(255, 255, 255, 0.12);
+    letter-spacing: -0.5vw;
+    white-space: nowrap;
+    transform: rotate(-26deg) !important;
+    z-index: 3;
+    overflow: hidden;
+}
+
+.bg-layer-middle {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 90% 10%, #1a30be 0%, #dcd9d9 50%, transparent 100%);
+    clip-path: polygon(45% 0, 100% 0, 100% 100%, 75% 100%);
+    z-index: 4;
+}
+
+.bg-layer-front {
+    position: absolute;
+    inset: 0;
+    background: 
+        radial-gradient(ellipse at 85% 15%, rgba(255,255,255,0.4) 0%, transparent 60%),
+        repeating-linear-gradient(45deg, transparent, transparent 15px, rgba(255, 255, 255, 0.03) 15px, rgba(255, 255, 255, 0.03) 30px);
+    mix-blend-mode: overlay;
+    z-index: 5;
+}
+
+/* --- TÍTULO INTERNO --- */
+.network-screen-title {
+    position: absolute;
+    top: 5vh;
+    left: 4vw;
+    font-family: 'Impact', sans-serif;
+    font-size: 8vh;
+    color: #ffffff;
+    font-style: italic;
+    letter-spacing: 2px;
+    text-shadow: 3px 3px 0px #000000;
+    z-index: 10;
+}
+
+/* --- ARQUITECTURA PARA ESCRITORIO (PC) --- */
+.network-main-layout {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: row;
+    width: 100vw;
+    height: 100vh;
+    padding: 16vh 4vw 12vh 4vw;
+    z-index: 10;
+}
+
+/* COLUMNA IZQUIERDA: CONTENEDOR DE LA LISTA EN SCROLL INVISIBLE */
+.network-list-canvas {
+    flex: 0 0 35vw;
+    display: flex;
+    flex-direction: column;
+    max-height: 72vh !important; 
+    overflow-y: scroll !important; 
+    overflow-x: visible !important;
+    padding-right: 2vw;
+    padding-top: 1vh;
+    padding-bottom: 5vh;
+    scrollbar-width: none !important;
+}
+
+.network-list-canvas::-webkit-scrollbar {
+    display: none !important;
+}
+
+.network-links-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 1.2vh; 
+    height: auto !important;
+    padding: 0;
+    margin: 0;
+}
+
+/* DISEÑO OBLICUO DE LAS TARJETAS */
+.network-link-card {
+    position: relative;
+    width: 32vw !important; 
+    height: 9.5vh;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    padding: 0 1.5vw;
+    background: rgba(0, 19, 44, 0.8);
+    clip-path: polygon(4% 0%, 100% 0%, 96% 100%, 0% 100%);
+    border-left: 0.4vw solid #1bf0ff;
+    border-right: 0.4vw solid #1bf0ff;
+    transition: transform 0.25s cubic-bezier(0.25, 1, 0.5, 1), background-color 0.2s ease;
+}
+
+.card-cell-number {
+    font-family: 'Impact', sans-serif;
+    font-size: 4.5vh;
+    color: #1bf0ff;
+    width: 4vw;
+    text-align: center;
+    margin-right: 1vw;
+}
+
+.card-cell-body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.card-display-name {
+    font-family: 'Impact', sans-serif;
+    font-size: 4vh;
+    color: #ffffff;
+    line-height: 1;
+}
+
+.card-display-sub {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.4vh;
+    font-weight: 900;
+    color: #1bf0ff;
+    margin-top: 0.2vh;
+}
+
+.card-cell-rank {
+    position: absolute;
+    right: 3.5vw !important; 
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    display: flex;
+    align-items: baseline;
+    gap: 0.3vw;
+    color: #1bf0ff;
+    transition: all 0.2s ease;
+    z-index: 10;
+}
+
+.rank-lbl {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.1vh;
+    font-weight: 900;
+}
+
+.rank-num {
+    font-family: 'Impact', sans-serif;
+    font-size: 4.5vh;
+    line-height: 1;
+}
+
+/* TARJETA SELECCIONADA BLANCA ROSA NEÓN */
+.network-link-card.item-active {
+    background: #ef0202 !important;
+    border-left: 0.5vw solid #ff0055 !important;
+    border-right: 0.5vw solid #ff0055 !important;
+    z-index: 50;
+}
+
+.network-link-card.item-active .card-cell-number {
+    background: #000000;
+    color: #ffffff;
+    clip-path: polygon(15% 0%, 100% 0%, 85% 100%, 0% 100%);
+    padding: 0 0.5vw;
+}
+
+.network-link-card.item-active .card-display-name,
+.network-link-card.item-active .card-display-sub,
+.network-link-card.item-active .card-cell-rank {
+    right: 2.2vw !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+}
+
+.network-link-card.item-active .card-cell-rank {
+    top: -0.3vh;
+    right: 1.5vw;
+}
+
+.network-link-card.item-active .rank-lbl { font-size: 1.3vh; }
+.network-link-card.item-active .rank-num { font-size: 8vh; line-height: 0.8; }
+
+/* ==========================================================
+   --- 2. ILUSTRACIÓN GIGANTE INTEGRADA AL FONDO ---
+   ========================================================== */
+.character-backdrop-art {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: contain !important; 
+    object-position: right bottom !important; 
+    transform: none !important; 
+    opacity: 0.95;
+    image-rendering: auto !important;
+    animation: character-fade 0.3s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+}
+
+@keyframes character-fade {
+    0% { opacity: 0; filter: brightness(1.2); }
+    100% { opacity: 0.95; filter: brightness(1); }
+}
+
+/* --- PANEL DE COMANDOS INFERIOR (ESCRITORIO) --- */
+.network-commands-bar {
+    position: absolute;
+    bottom: 5vh;
+    right: 6vw;
+    color: #ffffff;
+    text-align: right;
+    z-index: 100;
+}
+
+.commands-description-text {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 3.6vh;
+    font-weight: 900;
+    font-style: italic;
+    margin-bottom: 0.4vh;
+    color: rgb(0, 0, 0);
+    text-shadow: 
+        -2px -2px 0 #ffffff,  2px -2px 0 #ffffff, 
+        -2px  2px 0 #ffffff,  2px  2px 0 #ffffff,
+        -3px  0px 0 #ffffff,  3px  0px 0 #ffffff,
+         0px -3px 0 #ffffff,  0px  3px 0 #ffffff,
+         4px  4px 0px rgba(27, 240, 255, 0.6);
+}
+
+.command-bar-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.commands-section-title {
+    font-size: 1.3vh;
+    font-weight: 900;
+    text-transform: uppercase;
+    color: #1bf0ff;
+    border-top: 0.25vh solid #ffffff;
+    padding-top: 0.5vh;
+    width: 14vw;
+    margin-bottom: 1.2vh;
+}
+
+.commands-prompts-list {
+    display: flex;
+    gap: 1.5vw;
+    font-size: 2.2vh;
+    font-weight: 900;
+}
+
+.prompt-item {
+    display: flex;
+    align-items: center;
+    gap: 0.4vw;
+}
+
+.pc-key-badge {
+    background: #ffffff;
+    color: #000;
+    font-size: 1.8vh;
+    padding: 0.1vh 0.5vw;
+    border-radius: 0.4vh;
+    font-weight: bold;
+}
+
+/* ==========================================================
+   --- 3. MEDIA QUERIES (COMPORTAMIENTO PARA CELULARES) ---
+   ========================================================== */
+@media (max-width: 767px) {
+    .fanfic-network-screen {
+        overflow-y: auto;
+    }
+
+    .network-main-layout {
+        position: relative;
+        display: flex;
+        flex-direction: column !important;
+        height: auto;
+        padding: 14vh 4vw 22vh 4vw !important;
+    }
+
+    .network-list-canvas {
+        flex: none !important;
+        width: 100% !important;
+        max-height: 55vh !important;
+        padding-right: 0;
+    }
+
+    .network-link-card {
+        width: 100% !important;
+        height: 8.5vh;
+        clip-path: none !important;
+        border-radius: 6px;
+        margin-bottom: 0.5vh;
+    }
+
+    .card-cell-number {
+        font-size: 3vh;
+        width: 8vw;
+    }
+
+    .card-display-name {
+        font-size: 3vh;
+    }
+
+    .card-cell-rank {
+        right: 4vw;
+        bottom: 1.5vh;
+    }
+
+    .network-link-card.item-active .rank-num {
+        font-size: 5vh !important;
+    }
+
+    .network-link-card.item-active .card-cell-number {
+        clip-path: none !important;
+        border-radius: 4px;
+    }
+
+    .network-bg-canvas .bg-layer-middle {
+        clip-path: none !important;
+    }
+
+    .character-backdrop-art {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        width: 85% !important;
+        height: 70% !important;
+        opacity: 0.28 !important;
+        z-index: 1;
+        pointer-events: none;
+    }
+
+    .network-commands-bar {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100vw;
+        background: linear-gradient(to top, #000b18 80%, transparent 100%);
+        padding: 2vh 6vw;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .commands-description-text {
+        font-size: 2.2vh;
+        width: 100%;
+    }
+
+    .command-bar-wrapper {
+        width: 100%;
+        align-items: center;
+    }
+
+    .commands-section-title {
+        width: 60vw;
+        text-align: center;
+    }
+
+    .commands-prompts-list {
+        gap: 6vw;
+        font-size: 1.8vh;
+    }
+    
+    .pc-key-badge {
+        font-size: 1.6vh;
+    }
+}

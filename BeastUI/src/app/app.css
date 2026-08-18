@@ -1,0 +1,501 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    user-select: none;
+    -webkit-user-drag: none;
+}
+
+/* DEGRADADO DE CASCADA DIRECTO EN EL LIENZO DEL NAVEGADOR */
+html, body {
+    width: 100vw !important;
+    height: 100vh !important;
+    max-width: 100vw !important;
+    max-height: 100vh !important;
+    overflow: hidden;
+    margin: 0 !important;
+    padding: 0 !important;
+    font-family: 'Montserrat', sans-serif;
+    background-color: #000000; /* El azul más oscuro del fondo del juego */
+}
+
+/* --- DISEÑO INTEGRAL DE LA PANTALLA DE BIENVENIDA (SPLASH SCREEN) --- */
+.splash-overlay {
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: #03000a; /* Fondo negro noche cerrado */
+    z-index: 9999999 !important; /* Capa sobre todo el universo */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 15vh;
+    cursor: pointer;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.splash-logo-container {
+    text-align: center;
+}
+
+.splash-main-title {
+    font-family: 'Impact', sans-serif;
+    font-size: 15vh;
+    color: #ffffff;
+    font-style: italic;
+    letter-spacing: 5px;
+    text-shadow: 0 0 30px rgba(27, 240, 255, 0.4), 5px 5px 0px #ff0055;
+    line-height: 1;
+}
+
+.splash-sub-title {
+    font-size: 1.6vh;
+    font-weight: 900;
+    color: #1bf0ff;
+    letter-spacing: 4px;
+    margin-top: 1vh;
+}
+
+/* El letrero parpadeante arcade que incita al usuario a dar clic */
+.splash-interactive-prompt {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 2.2vh;
+    font-weight: 900;
+    color: #ffffff;
+    letter-spacing: 1px;
+    text-shadow: 2px 2px 0px #000;
+    animation: flash-prompt 1.4s infinite alternate ease-in-out;
+}
+
+@keyframes flash-prompt {
+    0% { opacity: 0.2; transform: scale(0.98); color: #8d81ea; }
+    100% { opacity: 1; transform: scale(1.02); color: #1bf0ff; }
+}
+
+
+
+/* --- TEXTO GIGANTE FIJADO EN EL FONDO ABSOLUTO --- */
+.left-giant-text {
+    position: fixed;
+    /* Forzamos a que esté pegado a la izquierda extrema de la pantalla */
+    top: 50%;
+    font-family: 'Impact', sans-serif;
+    font-size: 25vw; 
+    color: #ffffff !important; 
+    letter-spacing: -0.6vw;
+    white-space: nowrap;
+    z-index: 1 !important; 
+    pointer-events: none;
+    overflow: hidden;
+    /* Lo rotamos y dejamos que el navegador recorte de forma natural lo que se salga */
+    transform: translateY(-50%) rotate(-14deg) !important;
+        pointer-events: none !important;
+}
+
+
+/* CONTENEDOR DE LA INTERFAZ TRANSPARENTE EN CAPA MEDIANA */
+.screen {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    overflow: hidden;
+    background: transparent !important;
+    z-index: 5 !important;
+}
+
+
+/* CANVÁ DEL MENÚ EN LA CAPA MÁS ALTA POSIBLE */
+.menu-canvas {
+    position: absolute;
+    /* Cambiado de 42vw a 52vw para moverlo a la derecha como en el juego */
+    left: 52vw !important; 
+    /* Cambiado de 15vh a 22vh para bajar un poco el bloque completo */
+    top: 22vh !important; 
+    z-index: 999 !important; 
+}
+
+
+.menu-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem !important; 
+    position: relative;
+    z-index: 1000 !important;
+}
+
+
+.screen {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    overflow: hidden;
+}
+
+.water-bg-layers {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -3;
+    pointer-events: none;
+}
+
+/* CAPA 1: El bloque azul intermedio (corte diagonal masivo) */
+.layer-back {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, #8000ff 0%, #000000 100%);
+    /* Cortamos el fondo en una diagonal afilada exacta estilo P3R */
+    clip-path: polygon(0 0, 100% 0, 65% 100%, 0 100%);
+}
+
+/* CAPA 2: El bloque cian brillante con la textura de la cascada (Arriba a la derecha) */
+.layer-middle {
+    position: absolute;
+    inset: 0;
+    /* Degradado del sol filtrado en el agua */
+    background: radial-gradient(circle at 90% 10%, #000000 0%, #0051ff 50%, transparent 100%);
+    clip-path: polygon(45% 0, 100% 0, 100% 100%, 75% 100%);
+}
+
+/* CAPA 3: Textura de líneas y ondas encima de los bloques */
+.layer-front {
+    position: absolute;
+    inset: 0;
+    background: 
+        /* Reflejos de luz de piscina/caustics */
+        radial-gradient(ellipse at 85% 15%, rgba(255,255,255,0.4) 0%, transparent 60%),
+        /* Líneas de corriente oblicuas de la cascada */
+        repeating-linear-gradient(45deg, transparent, transparent 15px, rgba(255, 255, 255, 0.03) 15px, rgba(255, 255, 255, 0.03) 30px);
+    mix-blend-mode: overlay;
+}
+
+/* --- LIENZO DEL FONDO --- */
+#waterfall-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw !important;
+    height: 100vh !important;
+    z-index: -5;
+    pointer-events: none;
+}
+
+
+
+/* --- BILLETERA --- */
+.wallet {
+    position: absolute;
+    top: 6vh;
+    left: 8vw;
+    z-index: 10;
+    transform: rotate(-3deg);
+}
+
+.wallet-container {
+    background: #ffffff;
+    color: #000000;
+    padding: 0.8vh 4vw 0.6vh 1.2vw;
+    border: 0.35vh solid #000000;
+    transform: skewX(-14deg);
+}
+
+.wallet-value {
+    font-family: 'Impact', sans-serif;
+    font-size: 5vh;
+    line-height: 0.85;
+    /* Ajustes para mantener el reloj centrado y rígido al cambiar los números */
+    letter-spacing: 0.1vw;
+    min-width: 10vw;
+    text-align: center;
+}
+
+
+.wallet-value .yen {
+    font-family: 'Oswald', sans-serif;
+    font-size: 4.2vh;
+}
+
+.wallet-label {
+    font-size: 1.2vh;
+    font-weight: 900;
+    text-transform: uppercase;
+    margin-top: 0.4vh;
+}
+
+
+.menu-item {
+    font-family: 'Impact', sans-serif;
+    text-transform: uppercase;
+    cursor: pointer;
+    position: relative;
+    white-space: nowrap;
+    /* transition: asegura que el movimiento en abanico se anime suavemente al cambiar de opción */
+    transition: transform 0.25s cubic-bezier(0.25, 1, 0.5, 1), font-size 0.2s ease, padding 0.2s ease;
+    font-size: 6.8vh;
+    line-height: 0.95;
+    color: #8d81ea;
+    text-shadow: 0px 2px 0px #04528c, 0px 4px 0px #01284a;
+}
+
+
+.text-skew {
+    display: inline-block;
+    transform: skewX(-14deg);
+    letter-spacing: 0.05vw;
+}
+
+/* MAPEO MANUAL DE LA CURVA EN ARCO */
+
+
+/* --- RESALTE DE LA OPCIÓN SELECCIONADA --- */
+.menu-item.active {
+    font-size: 9vh !important;
+    color: #000000 !important;
+    text-shadow: none !important;
+    z-index: 100;
+    padding: 0.4vh 6vw 0.4vh 3vw;
+}
+
+.menu-item.active::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, #ff0055 0%, #ff3b93 40%, #ffffff 85%);
+    clip-path: polygon(10% 0%, 100% 0%, 90% 100%, 0% 100%);
+    z-index: -1;
+}
+
+.menu-item.active .text-skew {
+    filter: drop-shadow(0.3vh 0.3vh 0px #ffffff) !important;
+}
+
+
+/* --- PANEL DE COMANDOS INFERIOR --- */
+.commands {
+    position: absolute;
+    bottom: 5vh;
+    right: 6vw;
+    color: #ffffff;
+    text-align: right;
+    z-index: 10;
+}
+
+.command-text {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 3.6vh;
+    font-weight: 900;
+    font-style: italic;
+    margin-bottom: 0.4vh;
+}
+
+.command-bar {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.command-title {
+    font-size: 1.3vh;
+    font-weight: 900;
+    text-transform: uppercase;
+    color: #04d5e3;
+    border-top: 0.25vh solid #ffffff;
+    padding-top: 0.5vh;
+    width: 14vw;
+    margin-bottom: 1.2vh;
+}
+
+.command-prompts {
+    display: flex;
+    gap: 1.5vw;
+    font-size: 2.2vh;
+    font-weight: 900;
+}
+
+.btn-prompt {
+    display: flex;
+    align-items: center;
+    gap: 0.4vw;
+}
+
+.key-icon {
+    background: #ffffff;
+    color: #000;
+    font-size: 1.8vh;
+    padding: 0.1vh 0.5vw;
+    border-radius: 0.4vh;
+    font-weight: bold;
+}
+
+@media (max-width: 1024px) {
+    .menu-canvas { left: 35vw; }
+    .menu-item { font-size: 5.5vh; }
+}
+
+@media (max-width: 768px) {
+    .menu-canvas { left: 20vw; top: 24vh; }
+    .menu-item { font-size: 4.8vh; }
+    .menu-item.active { font-size: 6.5vh !important; }
+}
+
+/* ==========================================================
+   --- MEDIA QUERIES DEFECTO: ADAPTACIÓN TOTAL INDESTRUCTIBLE ---
+   ========================================================== */
+
+/* --- AJUSTE PARA TABLETAS Y RESOLUCIONES MEDIANAS --- */
+@media (max-width: 1024px) {
+    /* Desplazamos el lienzo del menú ligeramente a la izquierda de forma segura */
+    .menu-canvas { 
+        left: 42vw !important; 
+        top: 24vh !important; 
+    }
+    
+    .menu-item { 
+        font-size: 5.5vh !important; 
+    }
+    
+    .menu-item.active { 
+        font-size: 7.2vh !important; 
+    }
+    
+    .command-text { 
+        font-size: 2.8vh !important; 
+    }
+    
+    .command-title { 
+        width: 22vw !important; 
+    }
+}
+
+/* --- AJUSTE ESTRICTO PARA SMARTPHONES (PANTALLAS VERTICALES) --- */
+@media (max-width: 768px) {
+    /* 1. Evitamos que el celular cree barras de scroll accidentales */
+    html, body, .screen {
+        overflow-y: auto !important;
+    }
+
+    /* 2. REESTRUCTURACIÓN DEL RELOJ: Se centra arriba en el celular */
+    .wallet {
+        position: absolute !important;
+        top: 3vh !important;
+        left: 50% !important;
+        transform: translateX(-50%) rotate(-1deg) !important;
+        width: max-content !important;
+    }
+
+    .wallet-container {
+        padding: 0.5vh 6vw 0.5vh 3vw !important;
+        border-width: 0.25vh !important;
+    }
+
+    .wallet-value {
+        font-size: 3.8vh !important;
+    }
+
+    .wallet-label {
+        font-size: 1vh !important;
+        text-align: center !important;
+    }
+
+    /* 3. Reducimos el texto gigante de fondo para que no invada la zona de lectura */
+    .left-giant-text {
+        font-size: 18vw !important;
+        left: 14vw !important;
+    }
+
+    /* 4. REUBICACIÓN DEL ABANICO: Se centra horizontalmente en el celular */
+    .menu-canvas {
+        position: relative !important;
+        left: 0 !important;
+        top: 0 !important;
+        width: 100vw !important;
+        margin-top: 18vh !important; /* Deja espacio limpio para el reloj superior */
+        padding: 0 8vw !important;
+        display: flex !important;
+        justify-content: center !important;
+        z-index: 999 !important;
+    }
+
+    .menu-list {
+        width: 100% !important;
+        align-items: center !important; /* Alineación central fluida para el dedo */
+        gap: 1.2vh !important;
+    }
+
+    /* Encogemos las opciones para que entren completas sin importar el ancho del móvil */
+    .menu-item {
+        font-size: 3.8vh !important;
+        text-shadow: 0px 1px 0px #04528c, 0px 2px 0px #01284a !important;
+        text-align: center !important;
+        width: 100% !important;
+    }
+
+    .text-skew {
+        transform: skewX(-10deg) !important;
+    }
+
+    /* El banner rosa activo se adapta al ancho seguro del celular */
+    .menu-item.active {
+        font-size: 4.8vh !important;
+        padding: 0.6vh 6vw !important;
+        width: auto !important;
+        min-width: 75vw !important;
+        display: block !important;
+    }
+
+    .menu-item.active::before {
+        clip-path: none !important; /* Evita cortes extraños en pantallas de celular angostas */
+        border-radius: 6px !important;
+    }
+
+    /* 5. PANEL DE COMANDOS INFERIOR: Fijo abajo con fondo de desvanecimiento negro */
+    .commands {
+        position: fixed !important;
+        bottom: 0 !important;
+        left: 0 !important;
+        width: 100vw !important;
+        /* Degradado de seguridad para asegurar la legibilidad sobre la cascada */
+        background: linear-gradient(to top, #000000 85%, transparent 100%) !important;
+        padding: 3vh 6vw 2vh 6vw !important;
+        text-align: center !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        z-index: 1000 !important;
+        right: auto !important;
+    }
+
+    .command-text {
+        font-size: 2.2vh !important;
+        text-align: center !important;
+        width: 100% !important;
+        margin-bottom: 0.8vh !important;
+    }
+
+    .command-bar {
+        width: 100% !important;
+        align-items: center !important;
+    }
+
+    .command-title {
+        width: 50vw !important;
+        text-align: center !important;
+        margin-bottom: 0.8vh !important;
+    }
+
+    .command-prompts {
+        font-size: 1.8vh !important;
+        gap: 8vw !important;
+    }
+
+    .key-icon {
+        font-size: 1.6vh !important;
+    }
+}

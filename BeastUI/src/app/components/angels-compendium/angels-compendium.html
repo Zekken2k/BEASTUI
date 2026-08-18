@@ -1,0 +1,64 @@
+<div class="angel-screen-canvas">
+    
+    <!-- FONDO POLIGONAL DE TU INTERFAZ MORADO NOCHE -->
+    <div class="angel-bg-layers">
+        <div class="bg-layer-deep-violet"></div>
+        <div class="bg-giant-text-watermark">ANGEL</div>
+        <div class="bg-layer-cyan-glow"></div>
+        <div class="bg-layer-front-grid"></div>
+    </div>
+
+    <!-- ENCABEZADO SUPERIOR -->
+    <header class="angel-screen-header">
+        <div class="header-title-container">
+            <span class="header-subtitle">REGISTRO DE FRAXINUS</span>
+            <h1 class="header-main-title">ÁNGELES ORIGINALES</h1>
+        </div>
+    </header>
+
+    <!-- CUERPO PRINCIPAL DINÁMICO -->
+    @if (angelsList.length > 0) {
+        <main class="angel-main-layout">
+            
+            <!-- PANEL DE TEXTOS E LORE (LADO IZQUIERDO INCLINADO) -->
+            <section class="angel-lore-panel">
+                
+                <!-- Tag del Arcano de tu fanfic -->
+                <div class="arcana-badge-skew">
+                    <span>ARCANO {{ angelsList[currentIndex].arcanaNum }} — {{ angelsList[currentIndex].arcanaName }}</span>
+                </div>
+                
+                <!-- Nombre oficial del Ángel original -->
+                <h2 class="angel-display-name">{{ angelsList[currentIndex].name }}</h2>
+                
+                <!-- Caja de texto oblicua con tu descripción desde HeidiSQL -->
+                <div class="description-box-oblique">
+                    <span class="info-tag-author">REGISTRO DE FACCIÓN</span>
+                    <p class="description-paragraph">{{ angelsList[currentIndex].description }}</p>
+                </div>
+
+                <div class="navigation-helper-prompt">✦ PULSA A / D O LAS FLECHAS PARA ALTERNAR ÁNGELES ✦</div>
+            </section>
+
+            <!-- ILUSTRACIÓN GIGANTE DEL ÁNGEL (LADO DERECHO CALCADO DE TU CAPTURA) -->
+            <section class="angel-graphic-panel">
+                <div class="angel-image-wrapper">
+                    <img [src]="angelsList[currentIndex].imageUrl" alt="Angel Lore Art" class="angel-render-img">
+                </div>
+            </section>
+
+        </main>
+    }
+
+    <!-- PANEL DE COMANDOS INFERIOR EN ESPAÑOL -->
+    <div class="angel-commands-bar">
+        <div class="commands-wrapper">
+            <span class="commands-title">Comandos</span>
+            <div class="commands-prompts-list">
+                <span class="prompt-item"><span class="pc-key-badge">◀ / ▶</span> Navegar</span>
+                <span class="prompt-item" (click)="goBack()" style="cursor: pointer;"><span class="pc-key-badge">Esc</span> Regresar al Menú</span>
+            </div>
+        </div>
+    </div>
+
+</div>

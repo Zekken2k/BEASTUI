@@ -1,0 +1,70 @@
+@if (showSplashScreen) {
+    <div class="splash-overlay">
+        <div class="splash-logo-container">
+            <h1 class="splash-main-title">B.E.A.S.T</h1>
+            <p class="splash-sub-title">DATE A LIVE FANFIC</p>
+        </div>
+        <div class="splash-interactive-prompt">
+            ✦ PULSA CUALQUIER TECLA O HAZ CLICK PARA ENTRAR EN LA WEB✦
+        </div>
+    </div>
+}
+
+<!-- CONDICIONAL EXCLUSIVA DEL MENÚ RAÍZ -->
+@if (isMainMenuActive) {
+    <div class="screen">
+        
+        <!-- CAPAS DEL FONDO DE CASCADA -->
+        <div class="water-bg-layers">
+            <div class="layer-back"></div>
+            <div class="left-giant-text">DAL: BEAST</div>
+            <div class="layer-middle"></div>
+            <div class="layer-front"></div>
+        </div>
+
+        <!-- MÓDULO DEL RELOJ -->
+        <div class="wallet">
+            <div class="wallet-container">
+                <div class="wallet-value">{{ clockText }}</div>
+                <div class="wallet-label">Hora Actual</div>
+            </div>
+        </div>
+
+        <!-- EL ABANICO DE MENÚS DINÁMICO -->
+        <nav class="menu-canvas">
+            <ul class="menu-list">
+                @for (item of menuItems; track item.name; let i = $index) {
+                    <li class="menu-item" 
+                        [class.active]="i === currentIndex"
+                        [style.transform]="getTransform(i)"
+                        (mouseenter)="onMouseEnter(i)"
+                        (click)="confirmSelection()">
+                        <span class="text-skew">{{ item.name }}</span>
+                    </li>
+                }
+            </ul>
+        </nav>
+
+        <!-- PANEL DE COMANDOS INFERIOR -->
+     @if (menuItems.length > 0 && menuItems[currentIndex]) {
+    <div class="commands">
+        <div class="command-text">{{ menuItems[currentIndex].desc }}</div>
+        <div class="command-bar">
+            <span class="command-title">Comandos</span>
+            <div class="command-prompts">
+                <span class="btn-prompt">
+                    <span class="key-icon">Enter</span> Confirmar
+                </span>
+                <span class="btn-prompt">
+                    <span class="key-icon">Esc</span> Salir
+                </span>
+            </div>
+        </div>
+    </div>
+}
+
+    </div>
+}
+
+<!-- ENTRADA DINÁMICA DE LA APP (AQUÍ CORRE SOCIAL LINKS AL ENTRAR EN SU RUTA) -->
+<router-outlet></router-outlet>

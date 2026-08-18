@@ -1,0 +1,101 @@
+<div class="music-screen-container">
+    
+    <!-- FONDO POLIGONAL DE TU INTERFAZ ADAPTADO EN MORADO NOCHE -->
+    <div class="music-bg-canvas">
+        <div class="bg-layer-deep-purple"></div>
+        <div class="bg-watermark-text">AUDIO</div>
+        <div class="bg-layer-violet-glow"></div>
+        <div class="bg-layer-grid-texture"></div>
+    </div>
+
+    <!-- ENCABEZADO SUPERIOR DE LA SECCIÓN -->
+    <header class="music-screen-header">
+        <div class="screen-title-container">
+            <span class="screen-subtitle">REGISTROS SONOROS DEL FRAXINUS</span>
+            <h1 class="screen-main-title">BANDA SONORA</h1>
+        </div>
+    </header>
+
+    <!-- CUERPO PRINCIPAL DIVIDIDO EN DOS COLUMNAS REINTERPRETADAS DE TU CAPTURA -->
+    <main class="music-main-layout">
+        
+        <!-- COLUMNA IZQUIERDA: ABANICO DE CANCIONES (REPLICA LA ESTRUCTURA DE LOS PERSONAJES) -->
+        @if (playlist.length > 0) {
+            <section class="music-playlist-panel">
+                <div class="playlist-scroll-canvas">
+                    <ul class="playlist-tracks-list">
+                        @for (track of playlist; track track.title; let i = $index) {
+                            <li class="ost-track-row"
+                                [class.item-active]="i === currentIndex"
+                                (mouseenter)="selectTrack(i)">
+                                
+                                <!-- Indicador de la pista en el extremo izquierdo -->
+                                <div class="track-cell-index">
+                                    <span>TRACK 0{{ track.order || (i + 1) }}</span>
+                                </div>
+
+                                <!-- Datos principales de la canción (Reemplaza a nombres y HP/SP de tu imagen) -->
+                                <div class="track-cell-body">
+                                    <h2 class="track-song-title">{{ track.title }}</h2>
+                                    <div class="track-category-badge">
+                                        <span>{{ track.tag }}</span>
+                                    </div>
+                                </div>
+
+                                <!-- Destello romboidal en el borde derecho -->
+                                <div class="track-cell-status">
+                                    <span class="status-sparkle">✦</span>
+                                </div>
+
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </section>
+        }
+
+        <!-- COLUMNA DERECHA: REPRODUCTOR NATIVO DE YOUTUBE EMDEBIDO -->
+        <section class="music-player-panel">
+            <div class="player-iframe-frame">
+               <!-- REEMPLAZA EL IFRAME DE TU ARCHIVO HTML POR ESTA VERSIÓN INMACULADA -->
+@if (currentSafeUrl) {
+    <!-- El secreto absoluto es usar [src] entre corchetes y pasarle ÚNICAMENTE la variable sin texto extra, sin comillas fijas y sin llaves -->
+    <iframe 
+        [src]="currentSafeUrl" 
+        title="YouTube Video Player"
+        frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+        referrerpolicy="strict-origin-when-cross-origin"
+        allowfullscreen>
+    </iframe>
+}
+ @else {
+    <div class="player-loading-placeholder">
+        <span class="loading-icon">🎵</span>
+        <p>CARGANDO PLAYLIST CONFIDENCIAL...</p>
+    </div>
+}
+
+                
+                <!-- Guía flotante en la esquina inferior del reproductor, calcada de tu captura -->
+                <div class="player-guide-label-box">
+                    <span class="guide-tag">REPRODUCTOR</span>
+                    <p class="guide-txt">Escuchando track actual desde la base de datos de tu fanfic.</p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- PANEL DE COMANDOS INFERIOR EN ESPAÑOL -->
+    <div class="music-commands-bar">
+        <div class="commands-wrapper">
+            <span class="commands-section-title">Controles Web</span>
+            <div class="commands-prompts-list">
+                <span class="prompt-item"><span class="pc-key-badge">W / S</span> Cambiar Pista</span>
+                <span class="prompt-item" (click)="goBack()" style="cursor: pointer;"><span class="pc-key-badge">Esc</span> Salir al Menú</span>
+            </div>
+        </div>
+    </div>
+
+</div>

@@ -1,0 +1,600 @@
+/* ==========================================================
+   --- 1. CONFIGURACIÓN BASE Y LIENZO GENERAL ---
+   ========================================================== */
+.fanfic-gallery-screen {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    background-color: #0c001c; /* Morado base ultra oscuro */
+    font-family: 'Montserrat', sans-serif;
+    transition: filter 0.3s ease;
+}
+
+/* EFECTO DE DESFOQUE GAUSSIANO AL MAXIMIZAR DEBAJO DEL LIGHTBOX */
+.gallery-bg-canvas.media-blur,
+.gallery-screen-header.media-blur,
+.gallery-main-layout.media-blur,
+.gallery-commands-bar.media-blur {
+    filter: blur(8px) brightness(0.4) !important;
+    transition: filter 0.25s ease;
+}
+
+/* --- CAPAS GEOMÉTRICAS ADAPTADAS A TU PALETA BEAST --- */
+.gallery-bg-canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    pointer-events: none;
+}
+
+.bg-layer-back-purple {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, #1d003b 0%, #4a008a 60%, #8300c4 100%);
+    clip-path: polygon(0 0, 100% 0, 45% 100%, 0 100%);
+    z-index: 2;
+}
+
+.bg-right-giant-text {
+    position: absolute;
+    left: -2vw;
+    font-family: 'Impact', sans-serif;
+    font-size: 24vw;
+    color: rgba(255, 255, 255, 0.05);
+    letter-spacing: -0.5vw;
+    white-space: nowrap;
+    transform: rotate(-12deg);
+    z-index: 3;
+}
+
+.bg-layer-middle-cyan {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 90% 90%, #0e0e0e 0%, #0055ff 70%, transparent 100%);
+    clip-path: polygon(70% 0, 100% 0, 100% 100%, 30% 100%);
+    z-index: 4;
+}
+
+.bg-layer-front-grid {
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(rgba(27, 240, 255, 0.08) 1.5px, transparent 0);
+    background-size: 25px 25px;
+    mix-blend-mode: overlay;
+    z-index: 5;
+}
+
+/* ==========================================================
+   --- 2. ENCABEZADO Y SISTEMA DE PESTAÑAS (TABS Q / E) ---
+   ========================================================== */
+.gallery-screen-header {
+    position: relative;
+    width: 100vw;
+    padding: 3vh 6vw;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 10;
+}
+
+.screen-subtitle {
+    font-size: 1.4vh;
+    font-weight: 900;
+    color: #1bf0ff;
+    letter-spacing: 2px;
+}
+
+.screen-main-title {
+    font-family: 'Impact', sans-serif;
+    font-size: 6vh;
+    color: #ffffff;
+    font-style: italic;
+    line-height: 1;
+    text-shadow: 3px 3px 0px #000000;
+}
+
+/* BOTONES DE LAS SUB-CATEGORÍAS */
+.gallery-tabs-container {
+    display: flex;
+    gap: 1vw;
+    z-index: 100;
+}
+
+.tab-btn {
+    background: rgba(12, 0, 28, 0.7);
+    border: 2px solid rgba(27, 240, 255, 0.3);
+    color: #8d81ea;
+    padding: 0.8vh 1.5vw;
+    font-family: 'Impact', sans-serif;
+    font-size: 2.2vh;
+    cursor: pointer;
+    transform: skewX(-14deg);
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5vw;
+}
+
+.tab-key {
+    background: #8d81ea;
+    color: #0c001c;
+    font-size: 1.4vh;
+    padding: 0.1vh 0.4vw;
+    border-radius: 3px;
+    font-family: sans-serif;
+    font-weight: bold;
+}
+
+/* RESALTE EN ROSA NEÓN DE LA PESTAÑA ACTIVA */
+.tab-btn.active {
+    background: #ff0055;
+    border-color: #ffffff;
+    color: #ffffff;
+    box-shadow: 0 0 15px rgba(255, 0, 85, 0.5);
+}
+
+.tab-btn.active .tab-key {
+    background: #ffffff;
+    color: #ff0055;
+}
+
+/* ==========================================================
+   --- 3. LAYOUT CENTRAL (GALERÍA Y CONTENEDORES EN PC) ---
+   ========================================================== */
+.gallery-main-layout {
+    position: relative;
+    width: 100vw;
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+    padding: 0 8vw;
+    align-items: center;
+    justify-content: space-between;
+    z-index: 10;
+    gap: 4vw;
+}
+
+/* ENVOLTURA DE LA GALERÍA CON FLECHAS FLOTANTES */
+.gallery-carousel-wrapper {
+    flex: 0 0 30vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    gap: 1vw;
+    transition: flex 0.25s ease;
+} 
+
+/* Ajuste dinámico de espacio si la foto es horizontal ancha */
+.gallery-carousel-wrapper.horizontal-layout {
+    flex: 0 0 35vw !important;
+}
+
+.web-nav-arrow {
+    background: rgba(12, 0, 28, 0.7) !important;
+    border: 2px solid rgba(27, 240, 255, 0.4) !important;
+    color: #1bf0ff !important;
+    font-size: 20px !important;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+    transition: all 0.2s ease;
+}
+
+.web-nav-arrow:hover {
+    background: #ff0055 !important;
+    border-color: #ffffff !important;
+    color: #ffffff !important;
+    transform: scale(1.1);
+}
+
+.gallery-preview-box {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5vh;
+    cursor: pointer;
+}
+
+/* ==========================================================
+   --- 4. MUTACIÓN ELÁSTICA DE PROPORCIÓN DE MARCO ---
+   ========================================================== */
+.gallery-neon-frame {
+    position: relative;
+    background: transparent !important;
+    border: 0.4vw solid #ffffff;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.7), 0 0 25px rgba(27, 240, 255, 0.5);
+    transform: rotate(-3deg) skewY(-2deg);
+    overflow: hidden;
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.2s;
+    display: block;
+}
+
+/* CLASE A: Proporción vertical para novelas de Wattpad */
+.gallery-neon-frame.vertical-frame {
+    aspect-ratio: 5 / 7 !important;
+    height: 46vh !important; 
+    width: auto !important;
+}
+
+/* CLASE B: Proporción panorámica para tus ilustraciones extra gigantes (3780x1890) */
+.gallery-neon-frame.panoramic-frame {
+    aspect-ratio: 2 / 1 !important;
+    width: 26vw !important; 
+    height: auto !important;
+}
+
+.gallery-preview-box:hover .gallery-neon-frame {
+    transform: scale(1.04) rotate(-1deg) skewY(0deg);
+    border-color: #1bf0ff;
+}
+
+.gallery-media-img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    display: block !important;
+    background: transparent !important;
+}
+
+.card-glass-glare {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0.05) 40%, transparent 40%);
+    pointer-events: none;
+}
+
+.grid-interaction-prompt {
+    font-size: 1.2vh;
+    font-weight: 900;
+    color: #1bf0ff;
+    letter-spacing: 1px;
+}
+
+/* ==========================================================
+   --- 5. COLUMNA DE DETALLES TEXTUALES Y SINOPSIS ---
+   ========================================================== */
+.gallery-details-panel {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.volume-badge-skew {
+    background: #ff0055;
+    color: #ffffff;
+    font-family: 'Impact', sans-serif;
+    font-size: 2.5vh;
+    padding: 0.4vh 2vw;
+    transform: skewX(-14deg);
+    box-shadow: 2px 2px 0 #000;
+    margin-bottom: 1vh;
+}
+
+.volume-title-text {
+    font-family: 'Impact', sans-serif;
+    font-size: 5.5vh;
+    color: #ffffff;
+    margin-bottom: 2vh;
+    text-shadow: 3px 3px 0px #000b18;
+}
+
+.synopsis-box-oblique {
+    position: relative;
+    width: 100%;
+    background: rgba(12, 0, 28, 0.85);
+    border-left: 0.5vw solid #ff0055;
+    padding: 4.5vh 3vw 3vh 3vw !important;
+    clip-path: polygon(3% 0%, 100% 0%, 97% 100%, 0% 100%);
+    box-shadow: -10px 10px 25px rgba(0,0,0,0.4);
+}
+
+.info-tag {
+    position: absolute;
+    top: 0.8vh !important;
+    background: #ffffff;
+    color: #000000;
+    font-size: 1.1vh;
+    font-weight: 900;
+    padding: 0.3vh 1vw;
+    transform: skewX(-14deg) !important;
+    border: 2px solid #000000;
+    z-index: 100 !important;
+    box-shadow: 2px 2px 0px #ff0055;
+}
+
+.synopsis-paragraph {
+    font-size: 1.9vh;
+    line-height: 1.6;
+    color: #e2d5f0;
+    font-weight: 500;
+}
+
+/* --- CARTEL INTERACTIVO SI LA SECCIÓN ESTÁ VACÍA --- */
+.gallery-empty-alert {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 40vh;
+}
+
+.alert-box-skew {
+    background: rgba(255, 0, 85, 0.15);
+    border: 2px dashed #ff0055;
+    padding: 4vh 4vw;
+    transform: skewX(-14deg);
+    text-align: center;
+    color: #ffffff;
+    box-shadow: 0 0 20px rgba(255, 0, 85, 0.2);
+}
+
+.alert-icon {
+    font-size: 5vh;
+    color: #ff0055;
+    display: block;
+    margin-bottom: 1vh;
+}
+
+.alert-text {
+    font-family: 'Impact', sans-serif;
+    font-size: 2.4vh;
+    letter-spacing: 1px;
+}
+
+/* ==========================================================
+   --- 6. PANEL DE COMANDOS INFERIOR WEB ---
+   ========================================================== */
+.gallery-commands-bar {
+    position: relative;
+    width: 100vw;
+    padding: 2vh 6vw 4vh 6vw;
+    display: flex;
+    justify-content: flex-end;
+    z-index: 10;
+}
+
+.commands-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.commands-section-title {
+    font-size: 1.2vh;
+    font-weight: 900;
+    text-transform: uppercase;
+    color: #1bf0ff;
+    border-top: 0.25vh solid #ffffff;
+    padding-top: 0.5vh;
+    width: 14vw;
+    margin-bottom: 0.8vh;
+    text-align: right;
+}
+
+.commands-prompts-list {
+    display: flex;
+    gap: 1.5vw;
+    font-size: 1.8vh;
+    font-weight: 900;
+    color: #ffffff;
+}
+
+.prompt-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+}
+
+.prompt-item:hover { color: #ff0055; }
+
+.pc-key-badge {
+    background: #ffffff;
+    color: #000000;
+    font-size: 1.4vh !important;
+    padding: 0.2vh 0.6vw !important;
+    border-radius: 0.4vh;
+    font-weight: bold;
+}
+
+
+/* ==========================================================
+   --- 7. VISOR MASIVO DE PANTALLA COMPLETA (LIGHTBOX) ---
+   ========================================================== */
+.gallery-lightbox-overlay {
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(6, 0, 15, 0.92) !important;
+    z-index: 999999 !important;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: zoom-out;
+    backdrop-filter: blur(8px);
+}
+
+.close-lightbox-btn {
+    position: absolute;
+    top: 4vh;
+    right: 4vw;
+    background: transparent;
+    border: none;
+    color: #ffffff;
+    font-size: 6vh;
+    cursor: pointer;
+    line-height: 0.5;
+}
+
+.lightbox-content-box {
+    position: relative;
+    width: auto !important;
+    height: auto !important;
+    max-width: 90vw;
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: default;
+}
+
+.lightbox-max-img {
+    height: 75vh !important;
+    width: auto !important;
+    border: 0.35vw solid #ffffff;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.85), 0 0 40px rgba(27, 240, 255, 0.3);
+}
+
+/* SEGURO DE PROPORCIÓN: Si la imagen es ancha (extras), escala por el ancho y no por el alto */
+.lightbox-max-img.wide-mode {
+    width: 75vw !important;
+    height: auto !important;
+}
+
+.lightbox-footer-caption {
+    margin-top: 2vh;
+    background: #ffffff;
+    color: #000000;
+    padding: 0.6vh 2.5vw;
+    transform: skewX(-14deg);
+    display: flex;
+    gap: 1.5vw;
+    font-family: 'Impact', sans-serif;
+    font-size: 2.4vh;
+}
+
+.caption-vol { color: #ff0055; }
+
+/* ==========================================================
+   --- 8. MEDIA QUERIES RESPONSIVOS PARA TABLETAS Y MÓVILES ---
+   ========================================================== */
+
+/* --- TABLETAS Y LAPTOPS PEQUEÑAS --- */
+@media (max-width: 1024px) {
+    .gallery-main-layout {
+        padding: 0 5vw;
+        gap: 3vw;
+    }
+    .gallery-carousel-wrapper {
+        flex: 0 0 38vw;
+    }
+    .gallery-carousel-wrapper.horizontal-layout {
+        flex: 0 0 42vw !important;
+    }
+    .gallery-neon-frame.vertical-frame {
+        height: 38vh !important;
+    }
+    .gallery-neon-frame.panoramic-frame {
+        width: 32vw !important;
+    }
+    .volume-title-text {
+        font-size: 4.5vh;
+    }
+    .synopsis-paragraph {
+        font-size: 1.7vh;
+    }
+    .commands-section-title {
+        width: 25vw;
+    }
+}
+
+/* --- SMARTPHONES (PANTALLAS VERTICALES DE CELULARES) --- */
+@media (max-width: 767px) {
+    .fanfic-gallery-screen {
+        overflow-y: auto; /* Permite scroll vertical controlado */
+    }
+    
+    .gallery-screen-header {
+        flex-direction: column !important;
+        gap: 2vh;
+        align-items: center;
+        text-align: center;
+    }
+
+    /* Cambio radical: Todo el layout pasa de fila horizontal a columna vertical */
+    .gallery-main-layout {
+        flex-direction: column !important;
+        height: auto;
+        padding: 2vh 6vw;
+        gap: 4vh;
+        justify-content: flex-start;
+    }
+
+    .gallery-carousel-wrapper, .gallery-carousel-wrapper.horizontal-layout {
+        width: 100% !important;
+        flex: none !important;
+    }
+
+    /* En celulares elásticos, adaptamos ambos marcos al ancho del smartphone */
+    .gallery-neon-frame.vertical-frame {
+        height: 42vh !important;
+        border-width: 0.6vw;
+    }
+
+    .gallery-neon-frame.panoramic-frame {
+        width: 80vw !important;
+        border-width: 0.6vw;
+    }
+
+    .gallery-details-panel {
+        width: 100%;
+        align-items: center; /* Centramos descripciones en el teléfono */
+    }
+
+    .volume-title-text {
+        font-size: 4vh;
+        text-align: center;
+        margin-bottom: 1.5vh;
+    }
+
+    /* Limpieza móvil para evitar que el corte oblicuo devore renglones */
+    .synopsis-box-oblique {
+        clip-path: none !important;
+        border-radius: 8px;
+        padding: 3vh 4vw !important;
+    }
+
+    .info-tag {
+        top: -12px !important;
+        left: 20px !important;
+        font-size: 10px;
+    }
+
+    .synopsis-paragraph {
+        font-size: 15px;
+        text-align: justify;
+    }
+
+    .gallery-commands-bar {
+        justify-content: center;
+        padding: 4vh 6vw;
+    }
+
+    .commands-section-title {
+        width: 50vw;
+        text-align: center;
+    }
+
+    /* Lightbox táctil móvil */
+    .lightbox-max-img, .lightbox-max-img.wide-mode {
+        width: 85vw !important;
+        height: auto !important;
+    }
+    .lightbox-footer-caption {
+        font-size: 18px;
+    }
+}

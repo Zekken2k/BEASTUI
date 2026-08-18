@@ -1,0 +1,372 @@
+/* ==========================================================
+   --- 1. CONFIGURACIÓN BASE Y LIENZO GENERAL ---
+   ========================================================== */
+.music-screen-container {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    background-color: #0b0014; /* Morado base ultra oscuro */
+    font-family: 'Montserrat', sans-serif;
+}
+
+/* --- CAPAS DE AGUA DEL FONDO MORADO/VIOLETA DE TU INTERFAZ --- */
+.music-bg-canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    pointer-events: none;
+}
+
+.bg-layer-deep-purple {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, #16002c 0%, #080014 60%, #020008 100%);
+    clip-path: polygon(0 0, 100% 0, 68% 100%, 0 100%);
+    z-index: 2;
+}
+
+.bg-watermark-text {
+    position: absolute;
+    left: -2vw;
+    bottom: -6vh;
+    font-family: 'Impact', sans-serif;
+    font-size: 25vw;
+    color: rgba(255, 255, 255, 0.03);
+    letter-spacing: -0.5vw;
+    white-space: nowrap;
+    transform: rotate(-10deg);
+    z-index: 3;
+}
+
+.bg-layer-violet-glow {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 90% 20%, #9e00ff 0%, #460080 50%, transparent 100%);
+    clip-path: polygon(50% 0, 100% 0, 100% 100%, 78% 100%);
+    z-index: 4;
+}
+
+.bg-layer-grid-texture {
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(rgba(255, 0, 119, 0.06) 1.5px, transparent 0);
+    background-size: 24px 24px;
+    mix-blend-mode: overlay;
+    z-index: 5;
+}
+
+/* ==========================================================
+   --- 2. ENCABEZADO SUPERIOR DE LA PANTALLA ---
+   ========================================================== */
+.music-screen-header {
+    position: relative;
+    width: 100vw;
+    padding: 4vh 6vw;
+    z-index: 10;
+}
+
+.screen-subtitle {
+    font-size: 1.4vh;
+    font-weight: 900;
+    color: #ff0077; /* Fucsia neón */
+    letter-spacing: 2px;
+}
+
+.screen-main-title {
+    font-family: 'Impact', sans-serif;
+    font-size: 6.5vh;
+    color: #ffffff;
+    font-style: italic;
+    line-height: 1;
+    text-shadow: 3px 3px 0px #000000;
+}
+
+/* ==========================================================
+   --- 3. DISTRIBUCIÓN HORIZONTAL DE LAS DOS COLUMNAS ---
+   ========================================================== */
+.music-main-layout {
+    position: relative;
+    width: 100vw;
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+    padding: 0 6vw;
+    align-items: center;
+    justify-content: space-between;
+    z-index: 10;
+    gap: 4vw;
+}
+
+/* COLUMNA IZQUIERDA: PANEL DE CANCIONES APILADAS */
+.music-playlist-panel {
+    flex: 0 0 45vw; /* Abarca casi la mitad de la pantalla izquierda */
+    display: flex;
+    flex-direction: column;
+}
+
+.playlist-scroll-canvas {
+    width: 100%;
+    height: 58vh;
+    max-height: 58vh;
+    overflow-y: scroll;
+    overflow-x: visible;
+    padding-right: 1vw;
+    scrollbar-width: none; /* Oculta scroll en Firefox */
+}
+
+.playlist-scroll-canvas::-webkit-scrollbar {
+    display: none !important; /* Oculta scroll en Chrome/Brave/Edge */
+}
+
+.playlist-tracks-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 1.2vh; /* Espacio simétrico entre pistas */
+}
+
+/* --- ARQUITECTURA DE LA CANCIÓN INDIVIDUAL OBLÍCUA --- */
+.ost-track-row {
+    position: relative;
+    width: 100%;
+    height: 8vh;
+    background: rgba(18, 0, 36, 0.75);
+    border-left: 0.4vw solid #ff0077;
+    clip-path: polygon(2% 0%, 100% 0%, 98% 100%, 0% 100%);
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.track-cell-index {
+    flex: 0 0 10vw;
+    height: 100%;
+    background: rgba(255, 0, 119, 0.12);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Impact', sans-serif;
+    font-size: 2.2vh;
+    color: #ff0077;
+    font-style: italic;
+    border-right: 1px dashed rgba(255, 0, 119, 0.3);
+}
+
+.track-cell-body {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 2vw;
+}
+
+.track-song-title {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 2.4vh;
+    font-weight: 800;
+    color: #ffffff;
+    letter-spacing: 0.5px;
+}
+
+.track-category-badge {
+    background: rgba(255, 255, 255, 0.08);
+    color: #ff0077;
+    font-size: 1.1vh;
+    font-weight: 900;
+    padding: 0.3vh 0.8vw;
+    border-radius: 2px;
+    letter-spacing: 1px;
+}
+
+.track-cell-status {
+    flex: 0 0 3vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(255, 0, 119, 0.4);
+}
+
+.status-sparkle {
+    font-size: 1.8vh;
+}
+
+/* ==========================================================
+   --- 4. PISTA SELECCIONADA ACTIVA (ESTILO DE TU CAPTURA) ---
+   ========================================================== */
+.ost-track-row.item-active {
+    background: #ffffff !important; /* Fondo blanco rígido exacto de tu imagen */
+    border-left: 0.6vw solid #ffffff !important; /* El borde muta a blanco inmaculado */
+    transform: scale(1.02) skewX(-1deg); /* Extrusión elástica */
+    box-shadow: 0 10px 30px rgba(255, 0, 119, 0.35);
+    z-index: 50;
+}
+
+.ost-track-row.item-active .track-cell-index {
+    background: #ff0077 !important; /* El index se vuelve fucsia neón */
+    color: #ffffff !important;
+}
+
+.ost-track-row.item-active .track-song-title {
+    color: #000000 !important; /* El título de la rola pasa a negro sólido */
+    font-weight: 900 !important;
+}
+
+.ost-track-row.item-active .track-category-badge {
+    background: #000000 !important;
+    color: #ffffff !important;
+}
+
+.ost-track-row.item-active .track-cell-status {
+    color: #ff0077 !important;
+    animation: bounce-sparkle 0.8s infinite alternate ease-in-out;
+}
+
+@keyframes bounce-sparkle {
+    0% { transform: scale(1); } 100% { transform: scale(1.3); }
+}
+
+/* ==========================================================
+   --- 5. COLUMNA DERECHA: ENCUADRE DEL REPRODUCTOR YT ---
+   ========================================================== */
+.music-player-panel {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.player-iframe-frame {
+    position: relative;
+    width: 38vw; /* Proporción ideal balanceada a la derecha de la rejilla */
+    aspect-ratio: 16 / 9; /* Formato nativo panorámico de video */
+    background: #000000;
+    border: 0.4vw solid #ffffff;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8), 0 0 30px rgba(158, 0, 255, 0.3);
+    transform: rotate(2deg) skewY(1deg); /* Inclinación dinámica de interfaz premium */
+    overflow: hidden;
+    transition: transform 0.3s ease;
+}
+
+.player-iframe-frame:hover {
+    transform: rotate(0deg) skewY(0deg) scale(1.01);
+}
+
+.player-iframe-frame iframe {
+    width: 100% !important;
+    height: 100% !important;
+    display: block;
+}
+
+/* CONTENEDOR DE ESPERA EN LO QUE TERMINA EL SUBSCRIBE */
+.player-loading-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 2vh;
+    color: #ffffff;
+}
+
+.loading-icon { font-size: 5vh; animation: rotate-note 2s infinite linear; }
+@keyframes rotate-note { 100% { transform: rotate(30deg); } }
+
+/* GUÍA FLOTANTE INFERIOR CALCADA DE TU CAPTURA DE INTERFAZ */
+.player-guide-label-box {
+    position: absolute;
+    bottom: -1px;
+    left: -1px;
+    right: -1px;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.95) 70%, transparent 100%);
+    padding: 4.5vh 2vw 1.5vh 2vw;
+    display: flex;
+    align-items: baseline;
+    gap: 1vw;
+    pointer-events: none; /* Deja pasar los clicks del mouse al reproductor */
+    z-index: 10;
+}
+
+.guide-tag {
+    font-family: 'Impact', sans-serif;
+    font-size: 1.4vh;
+    color: #ff0077;
+    background: #000000;
+    padding: 0.2vh 0.6vw;
+    transform: skewX(-14deg);
+    border: 1px solid #ff0077;
+}
+
+.guide-txt {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.3vh;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.7);
+    letter-spacing: 0.5px;
+    line-height: 1.2;
+}
+
+/* ==========================================================
+   --- 6. PANEL DE COMANDOS INFERIOR ---
+   ========================================================== */
+.music-commands-bar {
+    position: relative;
+    width: 100vw;
+    padding: 2vh 6vw 4vh 6vw;
+    display: flex;
+    justify-content: flex-end;
+    z-index: 10;
+}
+
+.commands-wrapper { display: flex; flex-direction: column; align-items: flex-end; }
+.commands-section-title { font-size: 1.2vh; font-weight: 900; text-transform: uppercase; color: #ff0077; border-top: 0.25vh solid #ffffff; padding-top: 0.5vh; width: 14vw; margin-bottom: 0.8vh; text-align: right; }
+.commands-prompts-list { display: flex; gap: 1.5vw; font-size: 1.8vh; font-weight: 900; color: #ffffff; }
+.prompt-item { display: flex; align-items: center; gap: 6px; }
+.pc-key-badge { background: #ffffff; color: #000000; font-size: 1.4vh !important; padding: 0.2vh 0.6vw !important; border-radius: 0.4vh; font-weight: bold; }
+
+/* ==========================================================
+   --- 7. MEDIA QUERIES (COMPORTAMIENTO PARA CELULARES) ---
+   ========================================================== */
+@media (max-width: 767px) {
+    .music-screen-header { padding: 3vh 6vw 1vh 6vw; }
+    .screen-main-title { font-size: 4.5vh; }
+    
+    /* El layout rota de fila horizontal a columna vertical en smartphones */
+    .music-main-layout {
+        flex-direction: column-reverse !important; /* El reproductor queda arriba y la lista abajo */
+        height: auto;
+        padding: 2vh 4vw;
+        gap: 3vh;
+        justify-content: flex-start;
+    }
+
+    .music-playlist-panel, .music-player-panel {
+        width: 100% !important;
+        flex: none !important;
+    }
+
+    .playlist-scroll-canvas { height: 35vh !important; }
+    .ost-track-row { height: 7vh; clip-path: none !important; border-radius: 4px; }
+    .ost-track-row.item-active { transform: scale(1.01) !important; }
+    .track-cell-index { flex: 0 0 18vw; font-size: 1.6vh; }
+    .track-song-title { font-size: 1.8vh; }
+    .track-category-badge { display: none; } /* Ocultamos etiquetas largas en celular */
+
+    /* Ventana del reproductor escalada a celular */
+    .player-iframe-frame {
+        width: 90vw !important;
+        transform: none !important;
+        border-width: 0.6vw;
+        border-radius: 6px;
+    }
+    .player-guide-label-box { display: none; } /* Limpieza visual en pantallas chicas */
+
+    .music-commands-bar { justify-content: center; padding: 3vh 6vw; }
+    .commands-section-title { width: 50vw; text-align: center; }
+}

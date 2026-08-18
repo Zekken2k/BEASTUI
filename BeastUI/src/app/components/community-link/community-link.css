@@ -1,0 +1,313 @@
+/* ==========================================================
+   --- 1. CONFIGURACIÓN BASE Y LIENZO GENERAL ---
+   ========================================================== */
+.community-screen-canvas {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    background-color: #05000c; /* Negro morado ultra profundo */
+    font-family: 'Montserrat', sans-serif;
+}
+
+/* --- CAPAS DE AGUA DEL FONDO POLIGONAL --- */
+.community-bg-layers {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    pointer-events: none;
+}
+
+.bg-layer-deep-purple {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, #100022 0%, #03000b 60%, #000000 100%);
+    clip-path: polygon(0 0, 100% 0, 62% 100%, 0 100%);
+    z-index: 2;
+}
+
+.bg-giant-text-watermark {
+    position: absolute;
+    left: -2vw;
+    bottom: -6vh;
+    font-family: 'Impact', sans-serif;
+    font-size: 25vw;
+    color: rgba(255, 255, 255, 0.02);
+    letter-spacing: -0.5vw;
+    white-space: nowrap;
+    transform: rotate(-10deg);
+    z-index: 3;
+}
+
+.bg-layer-cyan-glow {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 85% 30%, #00f0ff 0%, #29005c 50%, transparent 100%);
+    clip-path: polygon(42% 0, 100% 0, 100% 100%, 72% 100%);
+    z-index: 4;
+}
+
+.bg-layer-front-grid {
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(rgba(27, 240, 255, 0.06) 1.5px, transparent 0);
+    background-size: 24px 24px;
+    mix-blend-mode: overlay;
+    z-index: 5;
+}
+
+/* ==========================================================
+   --- 2. ENCABEZADO SUPERIOR DE LA PANTALLA ---
+   ========================================================== */
+.community-screen-header {
+    position: relative;
+    width: 100vw;
+    padding: 4vh 6vw;
+    z-index: 10;
+}
+
+.header-subtitle {
+    font-size: 1.4vh;
+    font-weight: 900;
+    color: #ff0055; /* Fucsia neón */
+    letter-spacing: 2px;
+}
+
+.header-main-title {
+    font-family: 'Impact', sans-serif;
+    font-size: 6.5vh;
+    color: #ffffff;
+    font-style: italic;
+    line-height: 1;
+    text-shadow: 3px 3px 0px #000000;
+}
+
+/* ==========================================================
+   --- 3. LAYOUT CENTRAL DE DOS COLUMNAS ---
+   ========================================================== */
+.community-main-layout {
+    position: relative;
+    width: 100vw;
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+    padding: 0 8vw;
+    align-items: center;
+    justify-content: space-between;
+    z-index: 10;
+    gap: 4vw;
+}
+
+/* COLUMNA IZQUIERDA: EXPEDIENTE DE REDES */
+.community-dossier-panel {
+    flex: 0 0 45vw;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.community-status-badge-skew {
+    background: #ff0055;
+    color: #ffffff;
+    font-family: 'Impact', sans-serif;
+    font-size: 2.2vh;
+    padding: 0.4vh 1.8vw;
+    transform: skewX(-14deg);
+    box-shadow: 2px 2px 0 #000;
+    margin-bottom: 1.5vh;
+}
+
+.community-display-name {
+    font-family: 'Impact', sans-serif;
+    font-size: 6.5vh;
+    color: #ffffff;
+    margin-bottom: 2.5vh;
+    text-shadow: 3px 3px 0px #000b18;
+    letter-spacing: 0.5px;
+    font-style: italic;
+    line-height: 1;
+}
+
+.community-box-oblique {
+    position: relative;
+    width: 100%;
+    background: rgba(11, 0, 24, 0.88);
+    border-left: 0.5vw solid #ff0055;
+    padding: 4.5vh 3vw 3.5vh 3vw !important;
+    clip-path: polygon(3% 0%, 100% 0%, 97% 100%, 0% 100%);
+    box-shadow: -10px 10px 25px rgba(0,0,0,0.5);
+}
+
+.info-tag-comms {
+    position: absolute;
+    top: 1vh !important;
+    background: #ffffff;
+    color: #000000;
+    font-size: 1.1vh;
+    font-weight: 900;
+    padding: 0.3vh 1vw;
+    transform: skewX(-14deg) !important;
+    border: 2px solid #000000;
+    z-index: 100 !important;
+    box-shadow: 2px 2px 0px #ff0055;
+}
+
+.community-paragraph {
+    font-size: 2.1vh;
+    line-height: 1.6;
+    color: #e2d5f0;
+    font-weight: 500;
+    text-align: justify;
+    margin: 0;
+}
+
+.community-paragraph strong { color: #ff0055; font-weight: 800; }
+
+/* COLUMNA DERECHA: EL BOTÓN FLOTANTE GIGANTE */
+.community-portal-panel {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+}
+
+.portal-interactive-frame {
+    position: relative;
+    width: 26vw;
+    height: 38vh;
+    background: #020b14;
+    border: 0.4vw solid #ffffff;
+    box-shadow: 0 20px 45px rgba(0,0,0,0.7), 0 0 25px rgba(0, 240, 255, 0.2);
+    transform: skewX(-6deg) rotate(2deg); /* Inclinación de interfaz calcada */
+    cursor: pointer;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Pulsación neón de fondo interactiva */
+.portal-glow-pulse {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at center, rgba(0, 240, 255, 0.15) 0%, transparent 70%);
+    animation: flash-pulse 2s infinite alternate ease-in-out;
+}
+
+@keyframes flash-pulse { 0% { opacity: 0.4; } 100% { opacity: 1; } }
+
+.portal-interactive-frame:hover {
+    background: #ffffff !important;
+    transform: skewX(-4deg) rotate(0deg) scale(1.02);
+    box-shadow: 0 25px 60px rgba(0, 240, 255, 0.4);
+    border-color: #00f0ff;
+}
+
+.portal-content-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5vh;
+    z-index: 10;
+    text-align: center;
+    transition: color 0.2s ease;
+}
+
+.portal-icon { font-size: 7vh; animation: bounce-icon 2s infinite alternate; }
+@keyframes bounce-icon { 100% { transform: translateY(-5px); } }
+
+.portal-main-label {
+    font-family: 'Impact', sans-serif;
+    font-size: 4vh;
+    color: #ffffff;
+    letter-spacing: 1px;
+    font-style: italic;
+    line-height: 1;
+}
+
+.portal-sub-label {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.1vh;
+    font-weight: 900;
+    color: #00f0ff;
+    letter-spacing: 0.5px;
+}
+
+/* Efecto hover invertido al volverse blanco estilo Atlus */
+.portal-interactive-frame:hover .portal-main-label { color: #000000 !important; }
+.portal-interactive-frame:hover .portal-sub-label { color: #ff0055 !important; }
+
+/* Aviso técnico inferior flotante en la tarjeta */
+.portal-footer-label {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.9) 70%, transparent);
+    padding: 3vh 1.5vw 1.2vh 1.5vw;
+    display: flex;
+    align-items: baseline;
+    gap: 0.6vw;
+    pointer-events: none;
+    z-index: 15;
+}
+
+.portal-tag { font-family: 'Impact', sans-serif; font-size: 1.1vh; color: #00f0ff; background: #000000; padding: 0.1vh 0.5vw; border: 1px solid #00f0ff; }
+.portal-footer-label p { font-size: 1.1vh; font-weight: 700; color: rgba(255, 255, 255, 0.4); margin: 0; line-height: 1.2; }
+.portal-interactive-frame:hover .portal-footer-label { opacity: 0; } /* Esconde la guía al hacer hover */
+
+/* PANEL DE COMANDOS INFERIOR */
+.community-commands-bar {
+    position: relative;
+    width: 100vw;
+    padding: 2vh 6vw 4vh 6vw;
+    display: flex;
+    justify-content: flex-end;
+    z-index: 10;
+}
+
+.commands-wrapper { display: flex; flex-direction: column; align-items: flex-end; }
+.commands-title { font-size: 1.2vh; font-weight: 900; text-transform: uppercase; color: #ff0055; border-top: 0.25vh solid #ffffff; padding-top: 0.5vh; width: 14vw; margin-bottom: 0.8vh; text-align: right; }
+.commands-prompts-list { display: flex; gap: 1.5vw; font-size: 1.8vh; font-weight: 900; color: #ffffff; }
+.prompt-item { display: flex; align-items: center; gap: 6px; }
+.pc-key-badge { background: #ffffff; color: #000000; font-size: 1.4vh !important; padding: 0.2vh 0.6vw !important; border-radius: 0.4vh; font-weight: bold; }
+
+/* ==========================================================
+   --- 4. MEDIA QUERIES RESPONSIVAS PARA SMARTPHONES ---
+   ========================================================= */
+@media (max-width: 767px) {
+    .community-screen-header { padding: 3vh 6vw 1vh 6vw; }
+    .header-main-title { font-size: 4.5vh; }
+    
+    .community-main-layout {
+        flex-direction: column !important; /* Rota a vertical en celular */
+        height: auto;
+        padding: 2vh 4vw;
+        gap: 5vh;
+        justify-content: flex-start;
+    }
+
+    .community-dossier-panel, .community-portal-panel { width: 100% !important; flex: none !important; }
+    .community-display-name { font-size: 4.5vh; text-align: center; width: 100%; }
+    .community-status-badge-skew { font-size: 1.8vh; margin: 0 auto 1.5vh auto; }
+
+    .community-box-oblique {
+        clip-path: none !important;
+        border-radius: 8px;
+        padding: 4vh 4vw 3vh 4vw !important;
+    }
+    .info-tag-comms { top: -12px !important; left: 15px !important; font-size: 10px; }
+    .community-paragraph { font-size: 16px; }
+
+    .portal-interactive-frame { width: 100% !important; height: 25vh; transform: none !important; border-radius: 8px; padding: 2vh 4vw; }
+    .portal-icon { font-size: 5vh; }
+    .portal-main-label { font-size: 3vh; }
+    
+    .community-commands-bar { justify-content: center; padding: 3vh 6vw; }
+    .commands-title { width: 50vw; text-align: center; }
+}

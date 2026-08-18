@@ -1,0 +1,16 @@
+
+/* RESET GLOBAL PARA ELIMINAR LÍNEAS Y MÁRGENES BLANCOS */
+html, body {
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    overflow: hidden !important;
+    background-color: #000b18; /* Color oscuro de fondo para evitar destellos blancos */
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}

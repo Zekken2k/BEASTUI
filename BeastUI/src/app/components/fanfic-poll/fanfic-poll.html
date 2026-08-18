@@ -1,0 +1,86 @@
+<div class="poll-screen-canvas">
+    
+    <!-- FONDO POLIGONAL ESTILO TERMINAL DE OPERACIONES MORADO -->
+    <div class="poll-bg-layers">
+        <div class="bg-layer-deep-purple"></div>
+        <div class="bg-giant-text-watermark">VOTE</div>
+        <div class="bg-layer-violet-glow"></div>
+        <div class="bg-layer-front-grid"></div>
+    </div>
+
+    <!-- ENCABEZADO SUPERIOR -->
+    <header class="poll-screen-header">
+        <div class="header-title-container">
+            <span class="header-subtitle">ENCUESTA DE PARTE DE FRAXINUS</span>
+            <h1 class="header-main-title">ENCUESTA DE LECTORES</h1>
+        </div>
+    </header>
+
+    <!-- CUERPO PRINCIPAL DIVIDIDO EN DOS COLUMNAS -->
+    <main class="poll-main-layout">
+        
+        <!-- COLUMNA IZQUIERDA: GOOGLE FORMS INCRASTADO NATIVAMENTE -->
+        <section class="poll-form-panel">
+            <div class="poll-iframe-wrapper">
+                @if (safeFormUrl) {
+                    <!-- El iframe dinámico protegido de Angular que inyecta tu formulario web -->
+                    <iframe 
+                        [src]="safeFormUrl" 
+                        frameborder="0" 
+                        marginheight="0" 
+                        marginwidth="0">
+                        Cargando formulario confidencial...
+                    </iframe>
+                } @else {
+                    <div class="poll-loading-placeholder">
+                        <span class="loading-icon">📊</span>
+                        <p>ESTABLECIENDO ENLACE CON GOOGLE FORMS...</p>
+                    </div>
+                }
+            </div>
+        </section>
+
+        <!-- COLUMNA DERECHA: PANEL INFORMATIVO Y REPORTE ESTÉTICO -->
+        <section class="poll-info-panel">
+            <div class="info-panel-frame">
+                
+                <div class="info-panel-header-skew">
+                    <h3>¡UNA ENCUESTA PARA MIS LECTORES!</h3>
+                </div>
+
+                <div class="info-instructions-box">
+                    <span class="instruction-bullet">✦</span>
+                    <p class="instruction-text">
+                        ¡Tu opinión importa! Dejanos saber lo que te parecio Date a Live:  <strong>B.E.A.S.T</strong>. Responde la encuesta activa a la izquierda de forma honesta.
+                    </p>
+                </div>
+
+                <div class="info-instructions-box">
+                    <span class="instruction-bullet">✦</span>
+                    <p class="instruction-text">
+                        Todas las respuestas se procesan de manera segura a través de <strong>Google Forms</strong> y quedan registrados de inmediato en la base de datos de control del autor.
+                    </p>
+                </div>
+
+                <!-- Aviso de advertencia decorativo estilo Atlus -->
+                <div class="poll-warning-badge-skew">
+                    <span class="warning-icon">⚠</span>
+                    <span class="warning-txt">REGISTRO ÚNICO POR USUARIO</span>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <!-- PANEL DE COMANDOS INFERIOR EN ESPAÑOL -->
+    <div class="poll-commands-bar">
+        <div class="commands-wrapper">
+            <span class="commands-title">Comandos</span>
+            <div class="commands-prompts-list">
+                <span class="prompt-item" (click)="goBack()" style="cursor: pointer;"><span class="pc-key-badge">Esc</span> Regresar al Menú</span>
+            </div>
+        </div>
+    </div>
+
+</div>

@@ -1,0 +1,280 @@
+/* ==========================================================
+   --- 1. CONFIGURACIÓN BASE Y LIENZO GENERAL ---
+   ========================================================== */
+.angel-screen-canvas {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    background-color: #0c0019; /* Morado noche cerrado */
+    font-family: 'Montserrat', sans-serif;
+}
+
+/* --- CAPAS DE AGUA DEL FONDO POLIGONAL MORADO/CIAN --- */
+.angel-bg-layers {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    pointer-events: none;
+}
+
+.bg-layer-deep-violet {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, #18002e 0%, #090014 60%, #020005 100%);
+    clip-path: polygon(0 0, 100% 0, 65% 100%, 0 100%);
+    z-index: 2;
+}
+
+.bg-giant-text-watermark {
+    position: absolute;
+    left: -2vw;
+    bottom: -6vh;
+    font-family: 'Impact', sans-serif;
+    font-size: 25vw;
+    color: rgba(255, 255, 255, 0.03);
+    letter-spacing: -0.5vw;
+    white-space: nowrap;
+    transform: rotate(-10deg);
+    z-index: 3;
+}
+
+.bg-layer-cyan-glow {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 90% 20%, #00bbff 0%, #3a0080 60%, transparent 100%);
+    clip-path: polygon(45% 0, 100% 0, 100% 100%, 75% 100%);
+    z-index: 4;
+}
+
+.bg-layer-front-grid {
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(rgba(27, 240, 255, 0.06) 1.5px, transparent 0);
+    background-size: 24px 24px;
+    mix-blend-mode: overlay;
+    z-index: 5;
+}
+
+/* ==========================================================
+   --- 2. ENCABEZADO SUPERIOR DE LA PANTALLA ---
+   ========================================================== */
+.angel-screen-header {
+    position: relative;
+    width: 100vw;
+    padding: 4vh 6vw;
+    z-index: 10;
+}
+
+.header-subtitle {
+    font-size: 1.4vh;
+    font-weight: 900;
+    color: #1bf0ff; /* Cian neón de contraste */
+    letter-spacing: 2px;
+}
+
+.header-main-title {
+    font-family: 'Impact', sans-serif;
+    font-size: 6.5vh;
+    color: #ffffff;
+    font-style: italic;
+    line-height: 1;
+    text-shadow: 3px 3px 0px #000000;
+}
+
+/* ==========================================================
+   --- 3. LAYOUT CENTRAL DE DOS COLUMNAS ---
+   ========================================================== */
+.angel-main-layout {
+    position: relative;
+    width: 100vw;
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+    padding: 0 8vw;
+    align-items: center;
+    justify-content: space-between;
+    z-index: 10;
+    gap: 4vw;
+}
+
+/* COLUMNA IZQUIERDA: PANEL TEXTUAL DEL LORE */
+.angel-lore-panel {
+    flex: 0 0 45vw;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.arcana-badge-skew {
+    background: #ff0055; /* Rosa neón potente */
+    color: #ffffff;
+    font-family: 'Impact', sans-serif;
+    font-size: 2.5vh;
+    padding: 0.4vh 2vw;
+    transform: skewX(-14deg);
+    box-shadow: 2px 2px 0 #000;
+    margin-bottom: 1.5vh;
+}
+
+.angel-display-name {
+    font-family: 'Impact', sans-serif;
+    font-size: 6vh;
+    color: #ffffff;
+    margin-bottom: 2.5vh;
+    text-shadow: 3px 3px 0px #000b18;
+    letter-spacing: 0.5px;
+    font-style: italic;
+}
+
+.description-box-oblique {
+    position: relative;
+    width: 100%;
+    background: rgba(12, 0, 28, 0.85);
+    border-left: 0.5vw solid #1bf0ff;
+    padding: 4.5vh 3vw 3vh 3vw !important;
+    clip-path: polygon(3% 0%, 100% 0%, 97% 100%, 0% 100%);
+    box-shadow: -10px 10px 25px rgba(0,0,0,0.4);
+}
+
+.info-tag-author {
+    position: absolute;
+    top: 1vh !important;
+    background: #ffffff;
+    color: #000000;
+    font-size: 1.1vh;
+    font-weight: 900;
+    padding: 0.3vh 1vw;
+    transform: skewX(-14deg) !important;
+    border: 2px solid #000000;
+    z-index: 100 !important;
+    box-shadow: 2px 2px 0px #1bf0ff;
+}
+
+.description-paragraph {
+    font-size: 2.1vh;
+    line-height: 1.6;
+    color: #e2d5f0;
+    font-weight: 500;
+    text-align: justify;
+}
+
+.navigation-helper-prompt {
+    font-size: 1.2vh;
+    font-weight: 900;
+    color: rgba(27, 240, 255, 0.5);
+    letter-spacing: 1px;
+    margin-top: 3vh;
+    width: 100%;
+    text-align: center;
+}
+
+/* COLUMNA DERECHA: ENCUADRE DINÁMICO DEL RENDER */
+.angel-graphic-panel {
+    position: absolute !important;
+    top: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    /* Bloqueamos el panel al 55% derecho para que no tape la columna del texto */
+    width: 55vw !important; 
+    height: 100vh !important;
+    z-index: 6; 
+    pointer-events: none;
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+    overflow: hidden;
+}
+
+
+
+.angel-image-wrapper {
+    height: 110vh !important; 
+    pointer-events: none;
+    overflow: hidden;
+    position: relative;
+    /* 3. Reajustamos el difuminado inferior para que se funda de forma limpia desde la barra de comandos */
+    -webkit-mask-image: linear-gradient(to top, rgba(0,0,0,0) 0%, rgba(0,0,0,1) 12%) !important;
+    mask-image: linear-gradient(to top, rgba(0,0,0,0) 0%, rgba(0,0,0,1) 12%) !important;
+}
+
+.angel-render-img {
+
+    height: 100% !important;
+
+    object-fit: contain !important;
+    filter: drop-shadow(-20px 15px 40px rgba(0,0,0,0.75)) saturate(1.2) contrast(1.1) brightness(1.05);
+    
+    /* Animación elástica fluida de entrada al pasar páginas con A/D */
+    animation: render-slide-in 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes render-slide-in {
+    0% { transform: translateX(60px) scale(1.03); opacity: 0; filter: brightness(1.8) blur(6px); }
+    100% { transform: translateX(0) scale(1); opacity: 1; filter: brightness(1) blur(0); }
+}
+
+/* ==========================================================
+   --- 4. PANEL DE COMANDOS INFERIOR ---
+   ========================================================== */
+.angel-commands-bar {
+    position: relative;
+    width: 100vw;
+    padding: 2vh 6vw 4vh 6vw;
+    display: flex;
+    justify-content: flex-end;
+    z-index: 10;
+}
+
+.commands-wrapper { display: flex; flex-direction: column; align-items: flex-end; }
+.commands-title { font-size: 1.2vh; font-weight: 900; text-transform: uppercase; color: #1bf0ff; border-top: 0.25vh solid #ffffff; padding-top: 0.5vh; width: 14vw; margin-bottom: 0.8vh; text-align: right; }
+.commands-prompts-list { display: flex; gap: 1.5vw; font-size: 1.8vh; font-weight: 900; color: #ffffff; }
+.prompt-item { display: flex; align-items: center; gap: 6px; }
+.pc-key-badge { background: #ffffff; color: #000000; font-size: 1.4vh !important; padding: 0.2vh 0.6vw !important; border-radius: 0.4vh; font-weight: bold; }
+
+/* ==========================================================
+   --- 5. MEDIA QUERIES RESPONSIVAS PARA SMARTPHONES ---
+   ========================================================== */
+@media (max-width: 767px) {
+    .angel-screen-header { padding: 3vh 6vw 1vh 6vw; }
+    .header-main-title { font-size: 4.5vh; }
+    
+    .angel-main-layout {
+        flex-direction: column !important; /* Rota a vertical en celular */
+        height: auto;
+        padding: 2vh 4vw;
+        gap: 4vh;
+        justify-content: flex-start;
+    }
+
+    .angel-lore-panel, .angel-graphic-panel { width: 100% !important; flex: none !important; }
+    .angel-display-name { font-size: 4vh; text-align: center; width: 100%; }
+    .arcana-badge-skew { font-size: 1.8vh; margin: 0 auto 1.5vh auto; }
+
+    .description-box-oblique {
+        clip-path: none !important;
+        border-radius: 8px;
+        padding: 4vh 4vw 3vh 4vw !important;
+        border-left-width: 1vw;
+    }
+    .info-tag-author { top: -12px !important; left: 15px !important; font-size: 10px; }
+    .description-paragraph { font-size: 16px; }
+
+    /* El render en smartphone se reduce y flota de fondo sutil */
+    .angel-image-wrapper {
+        width: 100vw !important;
+        height: 40vh !important;
+        position: absolute;
+        bottom: 8vh;
+        right: 0;
+        z-index: -1;
+    }
+    .angel-render-img { opacity: 0.25 !important; } /* Silueta fantasma en teléfono táctil */
+    
+    .angel-commands-bar { justify-content: center; padding: 3vh 6vw; }
+    .commands-title { width: 50vw; text-align: center; }
+}

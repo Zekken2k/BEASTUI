@@ -1,0 +1,250 @@
+/* ==========================================================
+   --- 1. CONFIGURACIÓN BASE Y LIENZO GENERAL ---
+   ========================================================== */
+.poll-screen-canvas {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    background-color: #060010; /* Fondo morado noche profundo */
+    font-family: 'Montserrat', sans-serif;
+}
+
+/* --- CAPAS DE AGUA DEL FONDO POLIGONAL MORADO/VIOLETA --- */
+.poll-bg-layers {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    pointer-events: none;
+}
+
+.bg-layer-deep-purple {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, #100022 0%, #03000b 60%, #000000 100%);
+    clip-path: polygon(0 0, 100% 0, 65% 100%, 0 100%);
+    z-index: 2;
+}
+
+.bg-giant-text-watermark {
+    position: absolute;
+    left: -2vw;
+    bottom: -6vh;
+    font-family: 'Impact', sans-serif;
+    font-size: 25vw;
+    color: rgba(255, 255, 255, 0.02);
+    letter-spacing: -0.5vw;
+    white-space: nowrap;
+    transform: rotate(-10deg);
+    z-index: 3;
+}
+
+.bg-layer-violet-glow {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 90% 20%, #8a00ff 0%, #310066 50%, transparent 100%);
+    clip-path: polygon(45% 0, 100% 0, 100% 100%, 75% 100%);
+    z-index: 4;
+}
+
+.bg-layer-front-grid {
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(rgba(255, 0, 119, 0.05) 1.5px, transparent 0);
+    background-size: 24px 24px;
+    mix-blend-mode: overlay;
+    z-index: 5;
+}
+
+/* ==========================================================
+   --- 2. ENCABEZADO SUPERIOR DE LA PANTALLA ---
+   ========================================================== */
+.poll-screen-header {
+    position: relative;
+    width: 100vw;
+    padding: 4vh 6vw;
+    z-index: 10;
+}
+
+.header-subtitle {
+    font-size: 1.4vh;
+    font-weight: 900;
+    color: #ff0055; /* Fucsia neón de contraste */
+    letter-spacing: 2px;
+}
+
+.header-main-title {
+    font-family: 'Impact', sans-serif;
+    font-size: 6.5vh;
+    color: #ffffff;
+    font-style: italic;
+    line-height: 1;
+    text-shadow: 3px 3px 0px #000000;
+}
+
+/* ==========================================================
+   --- 3. LAYOUT CENTRAL DE DOS COLUMNAS BALACEADAS ---
+   ========================================================== */
+.poll-main-layout {
+    position: relative;
+    width: 100vw;
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+    padding: 0 8vw;
+    align-items: center;
+    justify-content: space-between;
+    z-index: 10;
+    gap: 4vw;
+}
+
+/* COLUMNA IZQUIERDA: CAJA COMPACTA DEL RECEPTOR GOOGLE FORMS */
+.poll-form-panel {
+    flex: 0 0 46vw;
+    display: flex;
+    flex-direction: column;
+}
+
+.poll-iframe-wrapper {
+    width: 100%;
+    height: 58vh;
+    background: #ffffff; /* Fondo blanco para albergar el formulario web */
+    border: 0.4vw solid #ffffff;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6), 0 0 25px rgba(255, 0, 85, 0.25);
+    transform: skewX(-4deg); /* Inclinación de interfaz premium a juego */
+    overflow: hidden;
+}
+
+.poll-iframe-wrapper iframe {
+    width: 100% !important;
+    height: 100% !important;
+    display: block;
+}
+
+.poll-loading-placeholder {
+    width: 100%;
+    height: 100%;
+    background: #0c0017;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 2vh;
+    color: #ffffff;
+}
+
+.loading-icon { font-size: 5vh; animation: pulse-vote 1s infinite alternate; }
+@keyframes pulse-vote { 100% { transform: scale(1.15); } }
+
+/* COLUMNA DERECHA: RECUADRO INCLINADO DE INSTRUCCIONES */
+.poll-info-panel {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+}
+
+.info-panel-frame {
+    width: 30vw;
+    background: rgba(12, 0, 24, 0.6);
+    border: 1px solid rgba(255, 0, 85, 0.15);
+    padding: 3vh 2vw;
+    transform: skewX(-5deg);
+    box-shadow: 0 12px 30px rgba(0,0,0,0.4);
+}
+
+.info-panel-header-skew {
+    background: #ff0055;
+    color: #ffffff;
+    font-family: 'Impact', sans-serif;
+    font-size: 2.2vh;
+    padding: 0.3vh 1.5vw;
+    transform: skewX(-14deg);
+    font-style: italic;
+    letter-spacing: 0.5px;
+    box-shadow: 2px 2px 0px #000000;
+    margin-bottom: 4vh;
+    width: fit-content;
+}
+
+.info-instructions-box {
+    display: flex;
+    gap: 0.8vw;
+    align-items: flex-start;
+    margin-bottom: 2.5vh;
+}
+
+.instruction-bullet { color: #ff0055; font-size: 1.6vh; line-height: 1.2; }
+.instruction-text { font-family: 'Montserrat', sans-serif; font-size: 1.8vh; font-weight: 500; color: #e2d5f0; line-height: 1.5; margin: 0; text-align: justify; }
+.instruction-text strong { color: #ff0055; font-weight: 800; }
+
+.poll-warning-badge-skew {
+    margin-top: 4vh;
+    border-top: 1px solid rgba(255, 0, 85, 0.15);
+    padding-top: 2vh;
+    display: flex;
+    align-items: center;
+    gap: 0.5vw;
+    color: #1bf0ff; /* Cian neón de advertencia */
+    font-family: 'Impact', sans-serif;
+    font-size: 1.6vh;
+    font-style: italic;
+    letter-spacing: 0.5px;
+}
+
+.warning-icon { font-size: 1.8vh; }
+
+/* ==========================================================
+   --- 4. PANEL DE COMANDOS INFERIOR ---
+   ========================================================== */
+.poll-commands-bar {
+    position: relative;
+    width: 100vw;
+    padding: 2vh 6vw 4vh 6vw;
+    display: flex;
+    justify-content: flex-end;
+    z-index: 10;
+}
+
+.commands-wrapper { display: flex; flex-direction: column; align-items: flex-end; }
+.commands-title { font-size: 1.2vh; font-weight: 900; text-transform: uppercase; color: #ff0055; border-top: 0.25vh solid #ffffff; padding-top: 0.5vh; width: 14vw; margin-bottom: 0.8vh; text-align: right; }
+.commands-prompts-list { display: flex; gap: 1.5vw; font-size: 1.8vh; font-weight: 900; color: #ffffff; }
+.prompt-item { display: flex; align-items: center; gap: 6px; }
+.pc-key-badge { background: #ffffff; color: #000000; font-size: 1.4vh !important; padding: 0.2vh 0.6vw !important; border-radius: 0.4vh; font-weight: bold; }
+
+/* ==========================================================
+   --- 5. MEDIA QUERIES RESPONSIVAS PARA SMARTPHONES ---
+   ========================================================== */
+@media (max-width: 767px) {
+    .poll-screen-header { padding: 3vh 6vw 1vh 6vw; }
+    .header-main-title { font-size: 4.5vh; }
+    
+    .poll-main-layout {
+        flex-direction: column !important; /* Rota a vertical en celular */
+        height: auto;
+        padding: 2vh 4vw;
+        gap: 4vh;
+        justify-content: flex-start;
+    }
+
+    .poll-form-panel, .poll-info-panel { width: 100% !important; flex: none !important; }
+    
+    .poll-iframe-wrapper {
+        width: 100vw !important;
+        height: 50vh !important;
+        transform: none !important;
+        border-width: 0.6vw;
+        border-radius: 6px;
+        margin-left: -4vw; /* Alineación al borde móvil */
+    }
+
+    .info-panel-frame { width: 100% !important; transform: none !important; padding: 3vh 4vw; }
+    .info-panel-header-skew { font-size: 1.8vh; }
+    .instruction-text { font-size: 16px; }
+    
+    .poll-commands-bar { justify-content: center; padding: 3vh 6vw; }
+    .commands-title { width: 50vw; text-align: center; }
+}

@@ -525,27 +525,45 @@
         text-align: center;
     }
 
- .fanfic-covers-screen,
+   /* DESBLOQUEO DE ARRASTRE DE PANTALLA MÓVIL SÍGUE IGUAL */
+    .fanfic-covers-screen,
     .covers-main-layout,
     .covers-scroll-canvas,
     .covers-container {
-        overflow-y: auto !important; /* Permite el movimiento vertical en Android */
-        height: auto !important;     /* El lienzo crece según el tamaño de la sinopsis */
+        overflow-y: auto !important;
+        height: auto !important;
         max-height: 100vh !important;
-        -webkit-overflow-scrolling: touch !important; /* Deslizamiento elástico fluido estilo iPhone/Android */
+        -webkit-overflow-scrolling: touch !important;
     }
 
+    /* BARRA DE COMANDOS SE QUEDA SEGURO ABAJO */
+    ::ng-deep .gallery-commands-bar {
+        position: fixed !important;
+        bottom: 0 !important;
+        left: 0 !important;
+        width: 100vw !important;
+        z-index: 99999 !important;
+        background: rgba(3, 0, 10, 0.95) !important;
+        backdrop-filter: blur(8px) !important;
+        display: flex !important;
+    }
 
-
-    /* 3. COLCHÓN DE SEGURIDAD INTERNO PARA LA SINOPSIS */
-    /* Le agregamos un margen gigante al final del párrafo para que el texto de Tohka no quede tapado por los comandos al bajar todo el scroll */
+    /* --- CORRECCIÓN LÁSER: ELIMINAMOS EL AIRE INVENTADO DE LOS PÁRRAFOS --- */
+    /* Reseteamos el párrafo para que su caja negra abrace el texto de forma exacta */
     .lightbox-paragraph-lore,
     .covers-synopsis-text,
     p {
-        margin-bottom: 12vh !important;
-        padding-bottom: 4vh !important;
+        margin-bottom: 0 !important;
+        padding-bottom: 0 !important;
     }
 
+    /* EL TRUCO: Metemos el colchón de seguridad en el contenedor general que envuelve todo.
+       Esto empuja la barra de "Controles Web" hacia abajo sin estirar el recuadro negro de la sinopsis */
+    .covers-main-layout,
+    .covers-container {
+        padding-bottom: 15vh !important; /* Espacio libre para que no tape los tres botones de Android */
+    }
+    
     /* Cambio radical: Todo el layout pasa de fila horizontal a columna vertical */
     .gallery-main-layout {
         flex-direction: column !important;

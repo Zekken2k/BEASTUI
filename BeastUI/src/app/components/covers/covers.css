@@ -516,17 +516,19 @@
 @media (max-width: 767px) {
 
         /* FORZAMOS SCROLL INTERNO: El párrafo o caja de la sinopsis se vuelve un lienzo deslizable */
+       .covers-synopsis-box,
+    .synopsis-box,
+    .lightbox-text-panel-skew,
     .lightbox-paragraph-lore,
     .covers-synopsis-text,
-    .synopsis-box, /* Coloca aquí la clase exacta de tu recuadro si la recuerdas */
     p {
-        max-height: 25vh !important; /* Limitamos la altura de la caja para que no se coma la pantalla */
-        overflow-y: auto !important; /* ACTIVA EL SCROLL VERTICAL AUTOMÁTICO EN ANDROID */
-        -webkit-overflow-scrolling: touch !important; /* Deslizamiento táctil suave de alta fidelidad */
+        max-height: 22vh !important; /* Forzamos a la caja negra a encogerse para que quepa en el celular */
+        overflow-y: auto !important; /* Asegura el scroll vertical elástico en Android */
+        -webkit-overflow-scrolling: touch !important; /* Deslizamiento táctil premium fluido */
         
-        /* Ajustes de aire limpios */
-        margin-bottom: 2vh !important;
-        padding: 2vh !important;
+        /* Limpieza de colchones de aire residuales que estiraban el contenedor */
+        margin-bottom: 1.5vh !important;
+        padding-bottom: 2vh !important;
         box-sizing: border-box !important;
     }
 

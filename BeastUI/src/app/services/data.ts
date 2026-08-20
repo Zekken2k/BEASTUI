@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 })
 export class Data {
   // Dirección pública oficial de tu servidor backend de Node en internet real
-  private apiUrl = 'https://beastui.onrender.com';
+  private apiUrl = 'https://beastui.onrender.com/api';
 
   constructor(private http: HttpClient) {}
 

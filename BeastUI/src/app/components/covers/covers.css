@@ -514,6 +514,23 @@
 
 /* --- SMARTPHONES (PANTALLAS VERTICALES DE CELULARES) --- */
 @media (max-width: 767px) {
+
+        /* FORZAMOS SCROLL INTERNO: El párrafo o caja de la sinopsis se vuelve un lienzo deslizable */
+    .lightbox-paragraph-lore,
+    .covers-synopsis-text,
+    .synopsis-box, /* Coloca aquí la clase exacta de tu recuadro si la recuerdas */
+    p {
+        max-height: 25vh !important; /* Limitamos la altura de la caja para que no se coma la pantalla */
+        overflow-y: auto !important; /* ACTIVA EL SCROLL VERTICAL AUTOMÁTICO EN ANDROID */
+        -webkit-overflow-scrolling: touch !important; /* Deslizamiento táctil suave de alta fidelidad */
+        
+        /* Ajustes de aire limpios */
+        margin-bottom: 2vh !important;
+        padding: 2vh !important;
+        box-sizing: border-box !important;
+    }
+
+    
     .fanfic-gallery-screen {
         overflow-y: auto; /* Permite scroll vertical controlado */
     }
@@ -523,30 +540,6 @@
         gap: 2vh;
         align-items: center;
         text-align: center;
-    }
-
-   /* DESBLOQUEO DE ARRASTRE DE PANTALLA MÓVIL SÍGUE IGUAL */
-    .fanfic-covers-screen,
-    .covers-main-layout,
-    .covers-scroll-canvas,
-    .covers-container {
-        overflow-y: auto !important;
-        height: auto !important;
-        max-height: 100vh !important;
-        -webkit-overflow-scrolling: touch !important;
-    }
-
-    /* BARRA DE COMANDOS SE QUEDA SEGURO ABAJO */
-    ::ng-deep .gallery-commands-bar {
-     display: none !important;
-    }
-
-
-    /* EL TRUCO: Metemos el colchón de seguridad en el contenedor general que envuelve todo.
-       Esto empuja la barra de "Controles Web" hacia abajo sin estirar el recuadro negro de la sinopsis */
-    .covers-main-layout,
-    .covers-container {
-        padding-bottom: 15vh !important; /* Espacio libre para que no tape los tres botones de Android */
     }
 
     /* Cambio radical: Todo el layout pasa de fila horizontal a columna vertical */
@@ -590,7 +583,6 @@
         clip-path: none !important;
         border-radius: 8px;
         padding: 3vh 4vw !important;
-        overflow-y: auto !important;
     }
 
     .info-tag {

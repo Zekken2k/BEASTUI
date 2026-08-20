@@ -516,20 +516,22 @@
 @media (max-width: 767px) {
 
         /* FORZAMOS SCROLL INTERNO: El párrafo o caja de la sinopsis se vuelve un lienzo deslizable */
-       .covers-synopsis-box,
+     .lightbox-text-panel-skew,
+    .covers-synopsis-box,
     .synopsis-box,
-    .lightbox-text-panel-skew,
-    .lightbox-paragraph-lore,
-    .covers-synopsis-text,
+    .covers-container div, /* Atrapa cualquier div interno residual de tus portadas */
     p {
-        max-height: 22vh !important; /* Forzamos a la caja negra a encogerse para que quepa en el celular */
-        overflow-y: auto !important; /* Asegura el scroll vertical elástico en Android */
-        -webkit-overflow-scrolling: touch !important; /* Deslizamiento táctil premium fluido */
+        height: 22vh !important;       /* Forzamos una altura fija compacta en smartphones */
+        max-height: 250px !important;  /* Candado estricto por hardware: de aquí no pasa */
+        overflow-y: auto !important;   /* Mantiene el scroll vertical interno operando */
+        display: block !important;     /* Rompe cualquier comportamiento flex que lo estire */
         
-        /* Limpieza de colchones de aire residuales que estiraban el contenedor */
-        margin-bottom: 1.5vh !important;
-        padding-bottom: 2vh !important;
+        /* Limpieza absoluta de márgenes y rellenos residuales que alargaban la caja */
+        margin-top: 1vh !important;
+        margin-bottom: 1vh !important;
+        padding: 2vh !important;
         box-sizing: border-box !important;
+        -webkit-overflow-scrolling: touch !important; /* Deslizamiento táctil premium fluido */
     }
 
     .gallery-commands-bar{

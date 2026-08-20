@@ -538,7 +538,7 @@
 
     /* BARRA DE COMANDOS SE QUEDA SEGURO ABAJO */
     ::ng-deep .gallery-commands-bar {
-     display: none;
+     display: none !important;
     }
 
 

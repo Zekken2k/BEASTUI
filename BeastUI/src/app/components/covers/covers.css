@@ -536,19 +536,7 @@
         -webkit-overflow-scrolling: touch !important;
     }
 
-    /* BARRA DE COMANDOS SE QUEDA SEGURO ABAJO */
-    ::ng-deep .gallery-commands-bar {
-     display: none !important;
-    }
 
-    /* --- CORRECCIÓN LÁSER: ELIMINAMOS EL AIRE INVENTADO DE LOS PÁRRAFOS --- */
-    /* Reseteamos el párrafo para que su caja negra abrace el texto de forma exacta */
-    .lightbox-paragraph-lore,
-    .covers-synopsis-text,
-    p {
-        margin-bottom: 0 !important;
-        padding-bottom: 0 !important;
-    }
 
     /* EL TRUCO: Metemos el colchón de seguridad en el contenedor general que envuelve todo.
        Esto empuja la barra de "Controles Web" hacia abajo sin estirar el recuadro negro de la sinopsis */

@@ -530,6 +530,9 @@
         box-sizing: border-box !important;
     }
 
+    .gallery-commands-bar{
+        bottom: 4vh;
+    }
     
     .fanfic-gallery-screen {
         overflow-y: auto; /* Permite scroll vertical controlado */

@@ -1,4 +1,5 @@
-import { Routes } from '@angular/router';
+import { Routes, Router } from '@angular/router';
+import { inject } from '@angular/core';
 
 export const routes: Routes = [
   {
@@ -23,7 +24,13 @@ export const routes: Routes = [
     path: 'diario-tohka',
     loadComponent: () => import('./components/diario-tohka/diario-tohka')
       .then(m => m.DiarioTohka),
-    data: { animation: 'TohkaPage' } // <-- INYECTADO
+    data: { animation: 'TohkaPage' },
+    
+    // EL GUARDIÁN DE RATATOSKR NATIVO: Bloquea la URL usando el inyector moderno de Angular
+    canActivate: [() => {
+      inject(Router).navigate(['/']); 
+      return false; // Bloqueo absoluto de renderizado
+    }]
   },
   {
     path: 'banda-sonora',

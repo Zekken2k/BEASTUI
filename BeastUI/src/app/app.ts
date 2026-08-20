@@ -77,6 +77,7 @@ export class App implements OnInit, OnDestroy {
   currentIndex: number = 0;
   clockText: string = '00:00';
   isMainMenuActive: boolean = true;
+   isSectionLockedAlert: boolean = false;
   
   // CONTROL DE ENTRADA WEB
   showSplashScreen: boolean = (typeof window !== 'undefined') 
@@ -203,10 +204,19 @@ export class App implements OnInit, OnDestroy {
       await new Promise(resolve => setTimeout(resolve, 300));
       this.router.navigate(['/diario-shido']);
     }
-    else if (activeItem === 'DIARIO DE TOHKA') {
-      await new Promise(resolve => setTimeout(resolve, 300));
-      this.router.navigate(['/diario-tohka']);
+        // --- REEMPLAZA LA CONDICIÓN DE TOHKA POR ESTA COMPUERTA INTELIGENTE ---
+    else if (activeItem.includes('TOHKA')) {
+      this.audio.playMenuSound('move'); // Alerta de tope oficial
+      this.isSectionLockedAlert = true; // Encendemos el cartel en el HTML
+      this.cdr.detectChanges();
+
+      setTimeout(() => {
+        this.isSectionLockedAlert = false;
+        this.cdr.detectChanges();
+      }, 2500);
     }
+
+
     else if (activeItem === 'ÁNGELES') {
       await new Promise(resolve => setTimeout(resolve, 300));
       this.router.navigate(['/angeles']);

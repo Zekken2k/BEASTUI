@@ -525,6 +525,10 @@
         text-align: center;
     }
 
+    .gallery-commands-bar{
+        display: none !important;
+    }
+
     /* Cambio radical: Todo el layout pasa de fila horizontal a columna vertical */
     .gallery-main-layout {
         flex-direction: column !important;

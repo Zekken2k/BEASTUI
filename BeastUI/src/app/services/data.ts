@@ -6,12 +6,12 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class Data {
-  // Dirección oficial de tu servidor backend de Node
-  private apiUrl = 'https://beastui.onrender.com';
+  // Dirección pública oficial de tu servidor backend de Node en internet real
+  private apiUrl = 'https://onrender.com';
 
   constructor(private http: HttpClient) {}
 
-  // Petición HTTP para traer las 8 opciones de tu fanfic
+  // Petición HTTP para traer las opciones de tu fanfic desde la nube de Aiven
   getMenuOptions(): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/main-menu`);
   }
@@ -19,34 +19,40 @@ export class Data {
   // Petición HTTP para traer los Social Links del protagonista
   getSocialLinks(): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/social-links`);
-    
   }
-  // 
-getCovers(): Observable<any[]> {
-  return this.http.get<any[]>('http://localhost:3000/api/covers');
-}
+  
+  // CORREGIDO: Mapeado asíncrono global para tus portadas en internet
+  getCovers(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/covers`);
+  }
 
-getShidoDiary(): Observable<any[]> {
-  return this.http.get<any[]>('http://localhost:3000/api/diario-shido');
-}
+  // CORREGIDO: Enlace inalámbrico perimetral para el Diario de Shido con carrusel por partes
+  getShidoDiary(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/diario-shido`);
+  }
 
-getTohkaDiary(): Observable<any[]> {
-  return this.http.get<any[]>('http://localhost:3000/api/diario-tohka');
-}
+  // CORREGIDO: Acceso para el Diario de Tohka (protegido por tu guardián CanActivate)
+  getTohkaDiary(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/diario-tohka`);
+  }
 
-getFanficOst(): Observable<any[]> {
-  return this.http.get<any[]>('http://localhost:3000/api/fanfic-ost');
-}
+  // CORREGIDO: Enlace global para reproducir tu banda sonora de YouTube OST
+  getFanficOst(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/fanfic-ost`);
+  }
 
-getFanficAngels(): Observable<any[]> {
-  return this.http.get<any[]>('http://localhost:3000/api/fanfic-angels');
-}
+  // CORREGIDO: Consulta asíncrona inalámbrica para tu Compendio de Ángeles de Lore
+  getFanficAngels(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/fanfic-angels`);
+  }
 
-getAuthorProfile(): Observable<any> {
-  return this.http.get<any>('http://localhost:3000/api/author-profile');
-}
+  // CORREGIDO: Expediente confidencial del perfil del autor desde el servidor perimetral
+  getAuthorProfile(): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/author-profile`);
+  }
 
-getCommunityLink(): Observable<any> {
-  return this.http.get<any>('http://localhost:3000/api/community-link');
-}
+  // CORREGIDO: Consulta dinámica para la invitación flotante a tu Discord Oficial
+  getCommunityLink(): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/community-link`);
+  }
 }

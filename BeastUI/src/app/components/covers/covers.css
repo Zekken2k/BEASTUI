@@ -590,6 +590,7 @@
         clip-path: none !important;
         border-radius: 8px;
         padding: 3vh 4vw !important;
+        overflow-y: auto !important;
     }
 
     .info-tag {

@@ -530,8 +530,13 @@
         box-sizing: border-box !important;
     }
 
+.prompt-item{
+    display: none;
+}
 
-
+.gallery-commands-bar{
+    bottom: 3vh;
+}
     .fanfic-gallery-screen {
         overflow-y: auto; /* Permite scroll vertical controlado */
     }

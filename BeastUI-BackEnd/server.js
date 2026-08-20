@@ -3,23 +3,36 @@ const mysql = require('mysql2');
 const cors = require('cors');
 
 const app = express();
-app.use(cors()); // Permitir que tu app de Angular (localhost:4200) consulte los datos
+app.use(cors()); 
 app.use(express.json());
 
-// --- CONFIGURACIÓN DE CONEXIÓN A HEIDISQL (MYSQL) ---
-const db = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',        // Reemplaza por tu usuario de HeidiSQL si es diferente
-    password: '51919616Nexus',        // Reemplaza por tu contraseña de HeidiSQL
-    database: 'beastui'
+// --- CONFIGURACIÓN DE CONEXIÓN EMBARCADA A LA NUBE (AIVEN/RAILWAY) ---
+// El Pool de conexiones optimiza el flujo inalámbrico de tus endpoints asíncronos
+const db = mysql.createPool({
+    host: 'mysql-1dc9d848-portherlopez-e914.b.aivencloud.com',
+    user: 'avnadmin', 
+    password: 'AVNS_h1J34PCdm7BG-OkPDCs', 
+    database: 'beastui', // La base de datos por defecto de tu servidor Aiven
+    port: 22969, // REEMPLAZA CON EL NÚMERO DE PUERTO EXACTO QUE TE DIO AIVEN (ej: 10452)
+    
+    // EL CANDADO DE INTERNET: Obligatorio para certificar la salida segura por red perimetral
+    ssl: {
+        rejectUnauthorized: false
+    },
+    
+    waitForConnections: true,
+    connectionLimit: 10,
+    queueLimit: 0
 });
 
-db.connect((err) => {
+// Mensaje de validación estructural en tu terminal de control
+db.getConnection((err, connection) => {
     if (err) {
-        console.error('Error conectando a la base de datos:', err);
-        return;
+        console.error('Error de nexo con la base de datos en la nube:', err.message);
+    } else {
+        console.log('Ecosistema B.E.A.S.T conectado con éxito a la Base de Datos en la Nube');
+        connection.release();
     }
-    console.log('Conectado exitosamente a la base de datos beastui_db en HeidiSQL');
 });
 
 // --- ENDPOINT 1: TRAER EL MENÚ PRINCIPAL DEL FANFIC ---
@@ -39,12 +52,11 @@ app.get('/api/social-links', (req, res) => {
     
     db.query(query, (err, results) => {
         if (err) {
-            console.error("Error ejecutando Query en HeidiSQL:", err.message);
+            console.error("Error ejecutando Query en la Base de Datos:", err.message);
             return res.status(500).json({ error: err.message });
         }
         
         const mappedResults = results.map(item => {
-            // VALIDACIÓN: Si el campo de la BD está vacío, es NULL o el texto "null", lo limpiamos a null real
             let driveUrl = item.image_drive_url;
             if (!driveUrl || driveUrl === 'null' || driveUrl.trim() === '') {
                 driveUrl = null;
@@ -56,7 +68,7 @@ app.get('/api/social-links', (req, res) => {
                 sub: item.sub_label,
                 rank: item.current_rank,
                 desc: item.command_desc,
-                avatarUrl: driveUrl // Enviamos un null real y limpio a Angular
+                avatarUrl: driveUrl 
             };
         });
         
@@ -64,11 +76,12 @@ app.get('/api/social-links', (req, res) => {
     });
 });
 
+// --- ENDPOINT 3: GALERÍA DE PORTADAS DE TUS VOLÚMENES ---
 app.get('/api/covers', (req, res) => {
     const query = 'SELECT vol_num as vol, title, synopsis, cover_type as type, image_url as imageUrl FROM fanfic_covers ORDER BY position_order ASC';
     db.query(query, (err, results) => {
         if (err) {
-            console.error("Error ejecutando Query en HeidiSQL:", err.message);
+            console.error("Error ejecutando Query en la Base de Datos:", err.message);
             return res.status(500).json({ error: err.message });
         }
         res.json(results);
@@ -92,14 +105,14 @@ app.get('/api/diario-shido', (req, res) => {
     `;
     db.query(query, (err, results) => {
         if (err) {
-            console.error("Error consultando shido_diary + metadata en HeidiSQL:", err.message);
+            console.error("Error consultando shido_diary en la Base de Datos:", err.message);
             return res.status(500).json({ error: err.message });
         }
         res.json(results);
     });
 });
 
-// --- ENDPOINT 5: CONSULTA EXCLUSIVA PARA EL DIARIO DE TOHKA (CON METADATOS) ---
+// --- ENDPOINT 5: CONSULTA EXCLUSIVA PARA EL DIARIO DE TOHKA ---
 app.get('/api/diario-tohka', (req, res) => {
     const query = `
         SELECT 
@@ -116,7 +129,7 @@ app.get('/api/diario-tohka', (req, res) => {
     `;
     db.query(query, (err, results) => {
         if (err) {
-            console.error("Error consultando la tabla tohka_diary en HeidiSQL:", err.message);
+            console.error("Error consultando la tabla tohka_diary en la Base de Datos:", err.message);
             return res.status(500).json({ error: err.message });
         }
         res.json(results);
@@ -128,7 +141,7 @@ app.get('/api/fanfic-ost', (req, res) => {
     const query = 'SELECT song_title as title, song_tag as tag, youtube_id as youtubeId, position_order as `order` FROM fanfic_ost ORDER BY position_order ASC';
     db.query(query, (err, results) => {
         if (err) {
-            console.error("Error consultando la tabla fanfic_ost en HeidiSQL:", err.message);
+            console.error("Error consultando la tabla fanfic_ost en la Base de Datos:", err.message);
             return res.status(500).json({ error: err.message });
         }
         res.json(results);
@@ -140,25 +153,23 @@ app.get('/api/fanfic-angels', (req, res) => {
     const query = 'SELECT arcana_num as arcanaNum, arcana_name as arcanaName, angel_name as name, angel_description as description, angel_image_url as imageUrl, position_order as `order` FROM fanfic_angels ORDER BY position_order ASC';
     db.query(query, (err, results) => {
         if (err) {
-            console.error("Error consultando la tabla fanfic_angels en HeidiSQL:", err.message);
+            console.error("Error consultando la tabla fanfic_angels en la Base de Datos:", err.message);
             return res.status(500).json({ error: err.message });
         }
         res.json(results);
     });
 });
 
-// --- ENDPOINT 8 BLINDADO: EXPEDIENTE CONFIDENCIAL DEL AUTOR ---
+// --- ENDPOINT 8: EXPEDIENTE CONFIDENCIAL DEL AUTOR ---
 app.get('/api/author-profile', (req, res) => {
-    // Escapamos de forma estricta las palabras reservadas `rank` y `database` entre comillas invertidas de SQL
     const query = 'SELECT author_name as `name`, author_rank as `rank`, author_status as `status`, author_bio as `bio`, stat_creativity as `creativity`, stat_writing as `writing`, stat_database as `database`, stat_design as `design`, stat_lore as `lore` FROM author_profile LIMIT 1';
     
     db.query(query, (err, results) => {
         if (err) {
-            console.error("Error consultando la tabla author_profile en HeidiSQL:", err.message);
+            console.error("Error consultando la tabla author_profile en la Base de Datos:", err.message);
             return res.status(500).json({ error: err.message });
         }
         
-        // Entregamos a Angular el primer objeto limpio del array
         if (results && results.length > 0) {
             res.json(results[0]);
         } else {
@@ -172,22 +183,21 @@ app.get('/api/community-link', (req, res) => {
     const query = "SELECT background_image_url as `url` FROM diary_metadata WHERE diary_id = 'DISCORD_INVITE' LIMIT 1";
     db.query(query, (err, results) => {
         if (err) {
-            console.error("Error consultando la invitación de Discord en HeidiSQL:", err.message);
+            console.error("Error consultando la invitación de Discord en la Base de Datos:", err.message);
             return res.status(500).json({ error: err.message });
         }
         
         if (results && results.length > 0) {
-            res.json(results[0]); // Escupimos el objeto directo con la propiedad { url: "..." }
+            res.json(results[0]); 
         } else {
             res.status(404).json({ error: "No se encontró el metadato DISCORD_INVITE" });
         }
     });
 });
 
-
-
-// Arrancar el servidor en el puerto 3000
-const PORT = 3000;
+// --- CONTROLADOR DE ARRANQUE PARA PRODUCCIÓN (MUDANZA A INTERNET) ---
+// El puerto toma process.env.PORT de forma dinámica para que Render o Railway inicien el canal
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-    console.log(`Servidor Backend corriendo en http://localhost:${PORT}`);
+    console.log(`Servidor de B.E.A.S.T abierto con éxito en el puerto ${PORT}`);
 });

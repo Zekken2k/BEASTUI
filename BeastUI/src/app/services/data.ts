@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 })
 export class Data {
   // Dirección oficial de tu servidor backend de Node
-  private apiUrl = 'http://localhost:3000/api';
+  private apiUrl = 'https://beastui.onrender.com';
 
   constructor(private http: HttpClient) {}
 

@@ -516,27 +516,21 @@
 @media (max-width: 767px) {
 
         /* FORZAMOS SCROLL INTERNO: El párrafo o caja de la sinopsis se vuelve un lienzo deslizable */
-     .lightbox-text-panel-skew,
-    .covers-synopsis-box,
-    .synopsis-box,
-    .covers-container div, /* Atrapa cualquier div interno residual de tus portadas */
+    .lightbox-paragraph-lore,
+    .covers-synopsis-text,
+    .synopsis-box, /* Coloca aquí la clase exacta de tu recuadro si la recuerdas */
     p {
-        height: 22vh !important;       /* Forzamos una altura fija compacta en smartphones */
-        max-height: 250px !important;  /* Candado estricto por hardware: de aquí no pasa */
-        overflow-y: auto !important;   /* Mantiene el scroll vertical interno operando */
-        display: block !important;     /* Rompe cualquier comportamiento flex que lo estire */
+        max-height: 25vh !important; /* Limitamos la altura de la caja para que no se coma la pantalla */
+        overflow-y: auto !important; /* ACTIVA EL SCROLL VERTICAL AUTOMÁTICO EN ANDROID */
+        -webkit-overflow-scrolling: touch !important; /* Deslizamiento táctil suave de alta fidelidad */
         
-        /* Limpieza absoluta de márgenes y rellenos residuales que alargaban la caja */
-        margin-top: 1vh !important;
-        margin-bottom: 1vh !important;
+        /* Ajustes de aire limpios */
+        margin-bottom: 2vh !important;
         padding: 2vh !important;
         box-sizing: border-box !important;
-        -webkit-overflow-scrolling: touch !important; /* Deslizamiento táctil premium fluido */
     }
 
-    .gallery-commands-bar{
-        display: none !important;
-    }
+
 
     .fanfic-gallery-screen {
         overflow-y: auto; /* Permite scroll vertical controlado */

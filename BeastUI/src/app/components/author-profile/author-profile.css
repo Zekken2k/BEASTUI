@@ -318,6 +318,7 @@
         padding: 2vh 4vw;
         gap: 5vh;
         justify-content: flex-start;
+        overflow-y: auto !important;
     }
 
     .author-dossier-panel, .author-stats-panel { width: 100% !important; flex: none !important; }

@@ -531,9 +531,9 @@
     }
 
     .gallery-commands-bar{
-        bottom: 4vh;
+        display: none !important;
     }
-    
+
     .fanfic-gallery-screen {
         overflow-y: auto; /* Permite scroll vertical controlado */
     }

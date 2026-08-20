@@ -536,6 +536,10 @@
         -webkit-overflow-scrolling: touch !important;
     }
 
+    /* BARRA DE COMANDOS SE QUEDA SEGURO ABAJO */
+    ::ng-deep .gallery-commands-bar {
+     display: none;
+    }
 
 
     /* EL TRUCO: Metemos el colchón de seguridad en el contenedor general que envuelve todo.

@@ -104,7 +104,7 @@
     <!-- ======================================================== -->
     <!-- VISOR DE LECTURA DE DIARIO COMPLETO (LIGHTBOX DE LORE)   -->
     <!-- ======================================================== -->
-    @if (isReading && entries.length > 0) {
+     @if (isReading && entries.length > 0) {
         <div class="diary-lightbox-overlay" (click)="toggleReading(false)">
             <button class="close-lightbox-btn" (click)="toggleReading(false)">×</button>
             
@@ -117,13 +117,38 @@
                 
                 <h2 class="lightbox-entry-title">{{ entries[currentIndex].title }}</h2>
                 
-                <!-- Letrero inclinado sólido donde se imprime el TEXT de HeidiSQL -->
+                <!-- Letrero inclinado sólido donde se imprime la PÁGINA ACTIVA de HeidiSQL -->
                 <div class="lightbox-text-panel-skew">
-                    <span class="lightbox-author-tag">BITÁCORA DE SHIDO ITSUKA</span>
-                    <p class="lightbox-paragraph-lore">{{ entries[currentIndex].text }}</p>
+                    <!-- Marcamos dinámicamente la parte en la que va el lector -->
+                    <span class="lightbox-author-tag">BITÁCORA DE SHIDO ITSUKA - PARTE {{ currentPage + 1 }}</span>
+                    <p class="lightbox-paragraph-lore">{{ entries[currentIndex].pages[currentPage] }}</p>
                 </div>
 
-                <div class="lightbox-footer-prompt">PULSA ESC O HAZ CLICK AFUERA PARA CERRAR</div>
+                <!-- --- NUEVO COMPONENTE: CONTROLES DEL CARRUSEL DE SUB-CAPÍTULOS --- -->
+                <div class="reader-carousel-controls">
+                    <!-- Flecha manual izquierda -->
+                    <button class="carousel-arrow-btn" 
+                            [disabled]="currentPage === 0" 
+                            (click)="changePage(-1)">
+                        ✦ ANTERIOR
+                    </button>
+                    
+                    <!-- Burbujas elásticas de seguimiento estilo Persona 3 Reload -->
+                    <div class="carousel-bullets-container">
+                        @for (page of entries[currentIndex].pages; track $index; let i = $index) {
+                            <span class="carousel-bullet" [class.bullet-active]="i === currentPage"></span>
+                        }
+                    </div>
+
+                    <!-- Flecha manual derecha -->
+                    <button class="carousel-arrow-btn" 
+                            [disabled]="currentPage === entries[currentIndex].pages.length - 1" 
+                            (click)="changePage(1)">
+                        SIGUIENTE ✦
+                    </button>
+                </div>
+
+                <div class="lightbox-footer-prompt">PULSA A / D O HAZ CLICK EN LAS FLECHAS PARA ADELANTAR HISTORIA • ESC PARA CERRAR</div>
             </div>
         </div>
     }

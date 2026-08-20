@@ -10,6 +10,8 @@ interface ShidoEntry {
   title: string;
   text: string;
   order: number;
+  // NUEVA PROPIEDAD: Bolsa de páginas picadas por el separador [CORTE]
+  pages: string[]; 
 }
 
 @Component({
@@ -24,6 +26,10 @@ export class DiarioShido implements OnInit {
   currentIndex: number = 0;
   isReading: boolean = false; // Controla si se abre la caja expansiva para leer
   bgImageUrl: string = ''; 
+  
+  // --- CONTROLADOR DEL CARRUSEL DE LECTURA ---
+  currentPage: number = 0; // Monitorea en qué sub-capítulo o página va el lector
+
   constructor(
     private audio: Audio,
     private router: Router,
@@ -36,11 +42,31 @@ export class DiarioShido implements OnInit {
   }
 
   // --- CONSULTA ASÍNCRONA REAL A TU NUEVA TABLA EN HEIDISQL ---
-private loadDatabaseDiaries(): void {
+  private loadDatabaseDiaries(): void {
     if ((this.data as any).getShidoDiary) {
       (this.data as any).getShidoDiary().subscribe({
         next: (data: any[]) => {
-          this.entries = data;
+          // MAPEO DINÁMICO: Convertimos el texto plano en páginas por sub-capítulos
+          this.entries = data.map((item: any) => {
+            let choppedPages: string[] = [];
+            
+            // Si el texto de HeidiSQL contiene el letrero [CORTE], lo dividimos en páginas
+            if (item.text && item.text.includes('[CORTE]')) {
+              choppedPages = item.text.split('[CORTE]');
+            } else {
+              // Si no tiene cortes, el texto entero se vuelve la página uno
+              choppedPages = [item.text || 'Sin bitácora registrada.'];
+            }
+
+            return {
+              arcoNum: item.arcoNum || 'ARCO I',
+              arcoTitle: item.arcoTitle || 'Tohka Return',
+              title: item.title || 'Tohka estaba rara',
+              text: item.text || '',
+              order: item.order || 0,
+              pages: choppedPages // Guardamos las páginas procesadas
+            };
+          });
           
           // Capturamos la URL unificada de fondo del primer registro que viene de la BD
           if (data.length > 0) {
@@ -54,13 +80,40 @@ private loadDatabaseDiaries(): void {
     }
   }
 
+  // --- NAVEGACIÓN EXCLUSIVA DEL CARRUSEL INTERNO DE PÁGINAS ---
+  changePage(offset: number): void {
+    const currentEntry = this.entries[this.currentIndex];
+    if (!currentEntry) return;
+
+    const targetPage = this.currentPage + offset;
+
+    // Si la página siguiente existe en la bolsa, avanzamos con audio elástico
+    if (targetPage >= 0 && targetPage < currentEntry.pages.length) {
+      this.currentPage = targetPage;
+      this.audio.playMenuSound('move'); // Efecto de ráfaga
+    } else {
+      this.audio.playMenuSound('move'); // Sonido de tope por hardware
+    }
+    this.cdr.detectChanges();
+  }
+
   // --- CAPTURA DE TECLADO WEB NATIVA ---
   @HostListener('window:keydown', ['$event'])
   handleKeyDown(event: KeyboardEvent): void {
     if (this.entries.length === 0) return;
 
+    // CONTROLES DE LA PANTALLA MASIVA DE LECTURA ACTIVA
     if (this.isReading) {
-      if (event.key === 'Escape' || event.key === 'Backspace') {
+      // 1. Avanzar sub-capítulo con Flecha Derecha o la tecla D
+      if (event.key === 'ArrowRight' || event.key === 'd' || event.key === 'D') {
+        this.changePage(1);
+      } 
+      // 2. Retroceder sub-capítulo con Flecha Izquierda o la tecla A
+      else if (event.key === 'ArrowLeft' || event.key === 'a' || event.key === 'A') {
+        this.changePage(-1);
+      } 
+      // 3. Cerrar el libro y salir
+      else if (event.key === 'Escape' || event.key === 'Backspace') {
         event.preventDefault();
         this.toggleReading(false);
       }
@@ -84,23 +137,21 @@ private loadDatabaseDiaries(): void {
     }
   }
 
-   changeSelection(offset: number): void {
+  changeSelection(offset: number): void {
     this.currentIndex = (this.currentIndex + offset + this.entries.length) % this.entries.length;
     this.audio.playMenuSound('move');
 
     // --- TRUCO WEB RECONOCIDO: SCROLL AUTOMÁTICO DE SEGUIMIENTO ---
-    // Buscamos el elemento de la ranura activa en el HTML y obligamos al contenedor a centrarlo con animación suave
     setTimeout(() => {
-      const activeSlot = document.querySelector('.rewind-slot.active');
+      const activeSlot = document.querySelector('.diary-item.active, .diary-card.active, .item-active');
       if (activeSlot) {
         activeSlot.scrollIntoView({
-          behavior: 'smooth', // Animación elástica
-          block: 'nearest'    // Lo acomoda en la zona visible más cercana
+          behavior: 'smooth', 
+          block: 'nearest'    
         });
       }
     }, 50);
   }
-
 
   onMouseEnter(index: number): void {
     if (this.isReading) return;
@@ -112,7 +163,10 @@ private loadDatabaseDiaries(): void {
 
   toggleReading(state: boolean): void {
     this.isReading = state;
+    // Reseteamos el paginador a la primera hoja (Parte 1) cada vez que se abre un Arco
+    this.currentPage = 0; 
     this.audio.playMenuSound('confirm');
+    this.cdr.detectChanges();
   }
 
   goBack(): void {

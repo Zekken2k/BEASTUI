@@ -17,10 +17,10 @@ interface MenuItem {
   imports: [CommonModule, RouterOutlet],
   templateUrl: './app.html',
   styleUrls: ['./app.css'], // <-- CORREGIDO: Se inyectó la coma obligatoria de Angular
-   animations: [
+  animations: [
     trigger('routeAnimations', [
       transition('* <=> *', [
-        // 1. ANCLAMOS AMBAS PANTALLAS EN CAPAS TRIDIMENSIONALES EN EL LIENZO GLOBAL
+        // 1. CAPTURAMOS LAS PANTALLAS EN CAPAS ABSOLUTAS DE ALTA FIDELIDAD
         query(':enter, :leave', [
           style({
             position: 'absolute',
@@ -33,32 +33,34 @@ interface MenuItem {
           })
         ], { optional: true }),
         
-        // La nueva pantalla arranca arriba (escondida en el techo), aplastada verticalmente e inclinada en diagonal
+        // 2. EL ARRANQUE DE LA OLA: La nueva pantalla arranca lista a la derecha
         query(':enter', [
           style({ 
-            transform: 'translateY(-100vh) scaleY(0.5) skewY(-8deg)', 
+            transform: 'translateX(100vw) skewX(-20deg) scaleX(0.85)', 
+            filter: 'blur(4px)',
             opacity: 0,
             zIndex: 2 
           })
         ], { optional: true }),
 
         group([
-          // 2. EL MENÚ VIEJO CAE DISPARADO AL SUB-SUELO (SE ABRE LA COMPUERTA HACIA ABAJO)
+          // 3. LA HOJA DE SALIDA: El menú viejo se dobla hacia la izquierda
           query(':leave', [
-            animate('0.3s cubic-bezier(0.36, 0, 0.66, -0.56)', 
+            animate('0.42s cubic-bezier(0.45, 0, 0.55, 1)', 
               style({ 
-                transform: 'translateY(100vh) scaleY(0.7) skewY(8deg)', 
-                filter: 'blur(15px) brightness(0.1)', 
+                transform: 'translateX(-100vw) skewX(20deg) scaleX(0.85)', 
+                filter: 'blur(12px) brightness(0.4)',
                 opacity: 0 
               })
             )
           ], { optional: true }),
 
-          // 3. EL BRUTAL IMPACTO EN RÁFAGA DE LA NUEVA PANTALLA (CAE DEL TECHO Y REBOTA CON PESO)
+          // 4. EL VAIVÉN DE OCÉANO ENTRANTE: La nueva pantalla se acomoda elásticamente
           query(':enter', [
-            animate('0.45s cubic-bezier(0.175, 0.885, 0.32, 1.35)', 
+            animate('0.55s cubic-bezier(0.25, 1, 0.5, 1)', 
               style({ 
-                transform: 'translateY(0) scaleY(1) skewY(0)', 
+                transform: 'translateX(0) skewX(0) scaleX(1)', 
+                filter: 'blur(0)',
                 opacity: 1 
               })
             )
@@ -67,6 +69,7 @@ interface MenuItem {
       ])
     ])
   ]
+
 
 })
 export class App implements OnInit, OnDestroy {

@@ -67,4 +67,6 @@
 }
 
 <!-- ENTRADA DINÁMICA DE LA APP (AQUÍ CORRE SOCIAL LINKS AL ENTRAR EN SU RUTA) -->
-<router-outlet></router-outlet>
+<div [@routeAnimations]="prepareRoute(outlet)">
+    <router-outlet #outlet="outlet"></router-outlet>
+</div>

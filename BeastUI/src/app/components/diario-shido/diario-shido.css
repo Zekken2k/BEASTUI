@@ -499,6 +499,67 @@
     100% { filter: brightness(1.2); box-shadow: 0px 0px 10px rgba(255, 0, 85, 0.6); }
 }
 
+/* ==========================================================
+   --- ARQUITECTURA DEL CARRUSEL DE LECTURA DE BITÁCORAS ---
+   ========================================================== */
+.reader-carousel-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin-top: 3.5vh;
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+    padding-top: 2.2vh;
+    box-sizing: border-box;
+}
+
+.carousel-arrow-btn {
+    background: transparent;
+    border: none;
+    color: #1bf0ff; /* Azul cian neón oficial */
+    font-family: 'Impact', sans-serif;
+    font-size: 1.8vh;
+    letter-spacing: 1.5px;
+    cursor: pointer;
+    transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), color 0.2s ease;
+    outline: none;
+}
+
+.carousel-arrow-btn:hover:not(:disabled) {
+    color: #ff0055; /* Muta a fucsia neón en el hover */
+    transform: scale(1.08);
+}
+
+.carousel-arrow-btn:disabled {
+    color: rgba(255, 255, 255, 0.15) !important;
+    cursor: not-allowed;
+    transform: none !important;
+}
+
+/* Contenedor de las burbujas de progreso */
+.carousel-bullets-container {
+    display: flex;
+    gap: 0.6vw;
+    align-items: center;
+}
+
+/* Burbujas oblicuas estilo navaja de Persona 3 */
+.carousel-bullet {
+    width: 1.1vh;
+    height: 1.1vh;
+    background: rgba(255, 255, 255, 0.2);
+    transform: skewX(-15deg); /* Inclinación idéntica a tus slots */
+    transition: all 0.28s cubic-bezier(0.175, 0.885, 0.32, 1.35);
+}
+
+/* Burbuja activa: Se estira elásticamente con sombra neón al avanzar */
+.carousel-bullet.bullet-active {
+    background: #ff0055 !important;
+    width: 2.8vh; /* Efecto elástico alargado */
+    box-shadow: 0 0 12px rgba(255, 0, 85, 0.6);
+}
+
+
 /* Modificación rápida de adaptabilidad en celular */
 @media (max-width: 767px) {
     .active-read-indicator-box {

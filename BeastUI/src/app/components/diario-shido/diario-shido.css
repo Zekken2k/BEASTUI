@@ -565,6 +565,7 @@
     .active-read-indicator-box {
         padding: 0.4vh 3vw;
         margin-right: 0;
+          overflow-y: auto !important;
     }
     .read-text-badge { font-size: 1vh; }
 }

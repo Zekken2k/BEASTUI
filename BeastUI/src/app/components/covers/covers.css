@@ -530,6 +530,10 @@
         box-sizing: border-box !important;
     }
 
+    .synopsis-box-oblique{
+        padding: 0vh !important;
+    }
+
 .prompt-item{
     display: none;
 }

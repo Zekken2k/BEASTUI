@@ -600,6 +600,10 @@
     .read-text-badge { 
         font-size: 1vh !important; 
     }
+    .lightbox-author-tag{
+        top: 3px !important;
+        font-size: 10px;
+    }
 }
 
 

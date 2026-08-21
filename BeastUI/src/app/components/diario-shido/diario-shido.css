@@ -561,14 +561,47 @@
 
 
 /* Modificación rápida de adaptabilidad en celular */
-@media (max-width: 767px) {
-    .active-read-indicator-box {
-        padding: 0.4vh 3vw;
-        margin-right: 0;
-          overflow-y: auto !important;
+/* ==========================================================
+   --- CONFIGURACIÓN RESPONSIVA REPARADA PARA EL DIARIO MÓVIL ---
+   ========================================================== */
+@media (max-width: 768px) {
+
+    /* CANDADO DE HARDWARE: Forzamos a la caja de texto a no estirarse hacia el subsuelo */
+    .lightbox-text-panel-skew,
+    .reader-text-canvas,
+    .lightbox-paragraph-lore {
+        max-height: 38vh !important;  /* Limita el tamaño del texto para que quepan los botones abajo */
+        overflow-y: auto !important;  /* ACTIVA EL SCROLL VERTICAL EXCLUSIVO ADENTRO DEL TEXTO */
+        display: block !important;    /* Rompe cualquier comportamiento flex que estire la pantalla */
+        -webkit-overflow-scrolling: touch !important; /* Deslizamiento táctil premium ultra fluido */
+        
+        /* Limpieza de márgenes sobrantes que empujaban el pie de página */
+        margin-bottom: 1.5vh !important;
+        padding-bottom: 1vh !important;
+        box-sizing: border-box !important;
     }
-    .read-text-badge { font-size: 1vh; }
+
+    /* BARRA DEL CARRUSEL INFERIOR (PAGINADOR P3R) */
+    /* Nos aseguramos de que el contenedor de las burbujas y flechas tenga aire cómodo para el dedo */
+    .reader-carousel-controls,
+    .reader-carousel-footer {
+        margin-top: 1.5vh !important;
+        padding-top: 1vh !important;
+        display: flex !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+    }
+
+    /* COMPLEMENTO DE TU MEDIA QUERY: Ajuste de tus badges que me pasaste */
+    .active-read-indicator-box {
+        padding: 0.4vh 3vw !important;
+        margin-right: 0 !important;
+    }
+    .read-text-badge { 
+        font-size: 1vh !important; 
+    }
 }
+
 
 /* --- ENVOLTURA ABSOLUTA DEL PERSONAJE CENTRAL DE FONDO --- */
 .diary-character-backdrop {

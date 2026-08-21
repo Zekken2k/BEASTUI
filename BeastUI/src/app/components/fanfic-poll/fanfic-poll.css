@@ -228,6 +228,7 @@
         padding: 2vh 4vw;
         gap: 4vh;
         justify-content: flex-start;
+        overflow-y: auto !important;
     }
 
     .poll-form-panel, .poll-info-panel { width: 100% !important; flex: none !important; }

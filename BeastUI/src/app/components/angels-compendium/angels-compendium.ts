@@ -24,6 +24,11 @@ export class AngelsCompendium implements OnInit {
   angelsList: AngelLoreItem[] = [];
   currentIndex: number = 0; // Controla qué Arcano/Ángel se está leyendo en pantalla
 
+  // --- VARIABLES PARA EL CONTROL DEL ARRASTRE TÁCTIL EN ANDROID ---
+  private touchStartX: number = 0;
+  private touchEndX: number = 0;
+  private readonly sweepThreshold: number = 50; // Píxeles mínimos de arrastre para gatillar el cambio
+
   constructor(
     private audio: Audio,
     private router: Router,
@@ -46,7 +51,7 @@ export class AngelsCompendium implements OnInit {
         error: (err: any) => console.error('Error jalando el compendio de ángeles:', err)
       });
     } else {
-      // Respaldo de desarrollo integrado en lo que sincronizas tu data.service.ts
+      // Respaldo de desarrollo integrado
       this.angelsList = [
         { 
           arcanaNum: 'VI', 
@@ -80,6 +85,39 @@ export class AngelsCompendium implements OnInit {
       this.movePage(-1);
     } else if (event.key === 'Escape' || event.key === 'Backspace') {
       this.goBack();
+    }
+  }
+
+  // --- ESCUCHAS TÁCTILES NATIVAS PARA PANTALLAS DE SMARTPHONES ---
+  
+  // 1. CAPTURAMOS EL MILISEGUNDO EN QUE EL DEDO TOCA EL MONITOR
+  @HostListener('window:touchstart', ['$event'])
+  onTouchStart(event: TouchEvent): void {
+    this.touchStartX = event.changedTouches[0].screenX;
+  }
+
+  // 2. CAPTURAMOS EL MILISEGUNDO EN QUE EL DEDO SE LEVANTA DEL CRISTAL
+  @HostListener('window:touchend', ['$event'])
+  onTouchEnd(event: TouchEvent): void {
+    if (this.angelsList.length === 0) return;
+    
+    this.touchEndX = event.changedTouches[0].screenX;
+    this.evaluateSwipeDirection();
+  }
+
+  // 3. PROCESAMOS LA DIRECCIÓN DEL DESLIZAMIENTO CON SINTAXIS LITERARIA
+  private evaluateSwipeDirection(): void {
+    const distanceX = this.touchStartX - this.touchEndX;
+
+    // Si el arrastre supera el umbral de píxeles, disparamos la ráfaga
+    if (Math.abs(distanceX) > this.sweepThreshold) {
+      if (distanceX > 0) {
+        // Deslizó hacia la izquierda -> Avanzar Ángel
+        this.movePage(1);
+      } else {
+        // Deslizó hacia la derecha -> Retroceder Ángel
+        this.movePage(-1);
+      }
     }
   }
 
